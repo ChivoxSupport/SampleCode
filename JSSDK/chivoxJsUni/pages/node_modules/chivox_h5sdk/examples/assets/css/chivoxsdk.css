@@ -1,0 +1,53 @@
+/* AiPanel */
+.aiPanel button{ width:50px; height:32px; line-height:32px; border:0; padding:0; margin:0; cursor:pointer;}
+.aiPanel button{ *margin-right:5px;}
+.aiPanel  .changeWordButton { position:absolute; background:#ccc; font-size:12px; line-height:32px; margin:0 5px;}
+.aiPanel  .change { position:absolute; background:#ccc; font-size:12px; line-height:32px; margin:0 5px;}
+.aiPanel .play{}
+.aiPanel .playOff{ background:#8AD7FB url(../images/icon.png) no-repeat 7px -184px;}
+.aiPanel .playOn{ background:#8AD7FB url(../images/icon.png) no-repeat -42px -184px;}
+.aiPanel .record{}
+.aiPanel .recordOff{ background:#8AD7FB url(../images/icon.png) no-repeat -147px -186px;}
+.aiPanel .recordOn{ background:#8AD7FB url(../images/icon.png) no-repeat -186px -186px;}
+.aiPanel .replay{}
+.aiPanel .replayDisabled{ background:#CCC url(../images/icon.png) no-repeat -89px -184px; cursor:default;}
+.aiPanel .replayOff{ background:#8AD7FB url(../images/icon.png) no-repeat -89px -184px;}
+.aiPanel .replayOn{ background:#8AD7FB url(../images/icon.png) no-repeat -42px -184px;}
+.aiPanel .recordProgressBar{ width:166px; height:10px; border:1px solid #61A7F5; margin-top:10px; font-size:1px; line-height:1px; display:none;}
+.aiPanel .recordProgressBar .value{ background:#8AD7FB; width:0; height:10px; font-size:1px; line-height:1px;}
+
+#chivox-player{ position:absolute; left:-2000px; top:-2000px;}
+.aiMediaDialogOverlay{ position:absolute; width:400px; height:300px; left:0; top:0; z-index:1002; background:url(../images/overlay-ie6.png) repeat;}
+.aiMediaDialog{ width:320px; background:#fff;}
+.aiMediaDialog{ position:absolute; left:200px; top:200px; z-index:1003; border:1px solid #ccc; /*overflow:hidden;*/}
+.aiMediaDialog button{ background:#ccc; width:50px; height:32px; line-height:32px; border:0; padding:0; margin:0; cursor:pointer;}
+.aiMediaDialog .dialogTitle{ text-align:center; height:30px; line-height:30px; background:#ccc;}
+.aiMediaDialog .dialogCloseButton{ position:absolute; left:290px; top:0; width:30px; height:30px;}
+.aiMediaDialog .dialogBody{ height:140px; text-align:center;}
+.aiMediaDialog .dialogInfo{}
+.aiMediaDialog .dialogInfo h5 { margin:0;}
+.aiMediaDialog .dialogInfo{ width: 300px; padding:0 10px; margin:10px 0;}
+.aiMediaDialog .dialogInfo ul{ margin:0; padding-left:20px;}
+.aiMediaDialog .hidden { display: none;}
+.aiMediaDialog .info { color: blue;}
+.aiMediaDialog .success { color: green;}
+.aiMediaDialog .error { color: red;}
+.aiMediaDialog .dialogButton{ text-align:center; padding:0 0 20px;}
+.aiMediaDialog .dialogButton .okButton{ margin:0 auto;}
+
+.aiMediaDialogSuccess{}
+.aiMediaDialogSuccess #chivox-recorder{ left:50px; top:30px;}
+.aiMediaDialogSuccess #chivox-recorder.loading{ left:20050px; top:30px; width:400px; height:300px;}
+
+.aiMediaDialogError{}
+.aiMediaDialogError .dialogFlashError{ padding:0 10px; font-size: 12px; text-align:left; margin-top:10px;}
+.aiMediaDialogError .dialogBody{ display:block;}
+
+.aiMediaDialogClosed{ position:absolute; left:0px; top:0px; width:1px; height:1px;}
+.aiMediaDialogClosed .dialogTitle,
+.aiMediaDialogClosed .dialogInfo,
+.aiMediaDialogClosed .dialogButton{ display:none;}
+.aiMediaDialogClosed .dialogBody{ height:1px;}
+.aiMediaDialogClosed #chivox-recorder{ position:absolute;left:460px; top:100px;}
+.aiMediaDialogClosed #chivox-recorder.loading{ left:20460px; top:100px; width:400px; height:300px;}
+.volumeBarInDialog { position:absolute;left:18px;top:64px;padding:0px; }
