@@ -65,12 +65,12 @@
 			<!-- en.scne.exam -->
 			<view v-if="result && coreType=='en.scne.exam'">Fluency:　{{fluency}}/4</view>
 			<view v-if="result && coreType=='en.scne.exam'">Pronunciation:　{{pron}}/4</view>
-			<view v-if="result && coreType=='en.scne.exam'">Grammar:　{{grammar}}/4</view>
+			<view v-if="result && coreType=='en.scne.exam'">Grammer:　{{grammer}}/4</view>
 			<view v-if="result && coreType=='en.scne.exam'">Content:　{{content}}/4</view>
 			<!-- en.prtl.exam -->
 			<view v-if="result && coreType=='en.prtl.exam'">Fluency:　{{fluency}}/4</view>
 			<view v-if="result && coreType=='en.prtl.exam'">Pronunciation:　{{pron}}/4</view>
-			<view v-if="result && coreType=='en.prtl.exam'">Grammar:　{{grammar}}/4</view>
+			<view v-if="result && coreType=='en.prtl.exam'">Grammer:　{{grammer}}/4</view>
 			<view v-if="result && coreType=='en.prtl.exam'">Content:　{{content}}/4</view>
 			<!-- en.asr.rec -->
 			<view v-if="result && coreType=='en.asr.rec'">Fluency:　{{fluency}}</view>
@@ -116,8 +116,8 @@
 	let sdkStatus = false;
 	let player = new Html5Player();
 	let sdk = new Html5Recorder({
-	    appKey: "your appkey",  /* Appkey authorized by Chivox. */
-	    sigurl: "https://your server address/JSSDK/php/sig.php",  /* Interface address for obtaining identity information. */
+	    appKey: "14255202120000cf",  /* Appkey authorized by Chivox. */
+	    sigurl: "https://10.0.70.150/JSSDK/php/sig.php",  /* Interface address for obtaining identity information. */
 	    server: "wss://cloud.chivox.com",
 	    onInit: function (mess) {
 	        console.log("Init success!")
@@ -321,7 +321,7 @@
 				Error: "",
 				Missed: "",
 				Multiple: "",
-				grammar: 0,
+				grammer: 0,
 				content: 0,
 				pron: 0,
 				/* asr */
@@ -477,7 +477,7 @@
 								}/* scne &  prtl*/
 								else if(this.coreType == 'en.scne.exam' || this.coreType == 'en.prtl.exam'){
 									this.fluency = score.result.details.multi_dim.flu;
-									this.grammar = score.result.details.multi_dim.grammar;
+									this.grammer = score.result.details.multi_dim.grammar;
 									this.content = score.result.details.multi_dim.cnt;
 									this.pron = score.result.details.multi_dim.pron;
 								}/* asr */
