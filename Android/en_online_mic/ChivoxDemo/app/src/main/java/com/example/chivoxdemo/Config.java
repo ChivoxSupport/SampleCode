@@ -6,7 +6,6 @@ public class Config {
     //Chivox authorized account
     public static String appKey = "Authorized appKey";
     public static String secretKey = "Authorized secretKey";
-    public static String provision = "Authorized provision code";
 
     //User Id. It is recommended to set it to easily distinguish the assessment data of different users.
     public static String userId="ChivoxDemo520";

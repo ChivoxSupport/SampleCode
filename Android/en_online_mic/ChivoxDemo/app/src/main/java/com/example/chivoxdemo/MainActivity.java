@@ -213,13 +213,16 @@ public class MainActivity extends AppCompatActivity
                     String vadPath = AIEngineHelper.extractResourceOnce(getApplicationContext(), "vad.0.13.bin", false);
                     Log.d(TAG, "vadPath:" + vadPath);
 
+                    String provisionPath = AIEngineHelper.extractResourceOnce(getApplicationContext(), "aiengine.provision", false);
+                    Log.d(TAG, "provisionPath:"+provisionPath);
+
                     //Local log path
                     String LogPath = AIEngineHelper.getFilesDir(getApplicationContext()).getPath() + "/Log.txt";
 
                     //Configure the appKey, secretKey, and provision authorized by Chivox
                     cfg.put("appKey", Config.appKey);
                     cfg.put("secretKey", Config.secretKey);
-                    cfg.put("provision", Config.provision);
+                    cfg.put("provision", provisionPath);
 
                     //Configure the vad function module, optional
                     {
