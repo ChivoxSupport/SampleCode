@@ -34,7 +34,7 @@ public class Config {
 
     //Situational Dialogue
     public static  String coreTypeScne = "en.scne.exam";
-    public static  String DisplayTextScne = "Please answer the question based on the text below.\n\n Boy: I love summer because I can go to the beakch, Which seasons is your favourite?\n Girl: Spinrg, It's warm but it's not too hot. There are beautiful trees and flowers everywhere. \n\n Question: \nWhy does the boy like summer?\n Your answer: ____\n";
+    public static  String DisplayTextScne = "Please answer the question based on the text below.\n\n Boy: I love summer because I can go to the beach, Which seasons is your favourite?\n Girl: Spring, It's warm but it's not too hot. There are beautiful trees and flowers everywhere. \n\n Question: \nWhy does the boy like summer?\n Your answer: ____\n";
     public static  String RefTextScne = "{\"lm\": [{\"text\": \"Because he can go to the beach\"}, {\"text\": \"Because the boy can go to the beach\"},{\"text\": \"The boy love summer because he can go to the beach\"},{\"text\": \"He can go to the beach\"}]}";
     public static  String DisplayReferenceAnswerScne = " Answer1:\n Because he can go to the beach. \n\n Answer2:\n Because the boy can go to the beach. \n\n Answer3:\n The boy love summer because he can go to the beach \n\n Answer4:\n He can go to the beach\n";
 

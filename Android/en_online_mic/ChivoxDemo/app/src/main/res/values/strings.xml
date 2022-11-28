@@ -6,7 +6,7 @@
     <string name="txt_paragraph">Paragraph</string>
     <string name="txt_en_choc_score">Multiple Choice</string>
     <string name="txt_en_scne_exam">Situational Dialogue</string>
-    <string name="txt_en_prtl_exam">Speaking with picture</string>
+    <string name="txt_en_prtl_exam">Describe the picture</string>
     <string name="txt_en_asr_rec">ASR</string>
     <string name="record">record</string>
     <string name="stop">stop</string>
