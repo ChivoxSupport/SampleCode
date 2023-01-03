@@ -21,6 +21,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, retain) NSNumber *enginetype;
 @property (nonatomic, retain) NSString *coretype;
+@property (nonatomic, retain) NSString *AudioSrc;
+
 
 @property (nonatomic, retain) NSString * audioPath;
 
@@ -29,6 +31,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (IBAction) recordButtonPressed;
 - (IBAction) playbackButtonPressed;
+
+- (void) AssessmentInnerRecorderMode;
+- (void) AssessmentOutFeedMode;
 
 - (void) showResult: (NSString *) text;
 - (void)changeButtonImage:(int)ETnum;

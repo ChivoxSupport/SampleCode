@@ -28,6 +28,13 @@
     NSLog(@"%@",self.engineC);
     
     //Text for display
+    if([self.AudioSrc isEqual:@"OuterFeed"])
+    {
+        self.refTextView.text = @"Please click on the microphone icon (no recording required) and the SDK will read the recorded audio file for assessment";
+        self.refTextView.editable=NO;
+        return;
+    }
+    
     if ([self.coretype isEqual: @"en.word.pron"])
     {
         self.refTextView.text = @"apple";
@@ -45,17 +52,17 @@
     }
     else if ([self.coretype isEqual: @"en.choc.score"])
     {
-        self.refTextView.text = @"Tell me an animal that can fly.\n A. Tiger \n B. Panda\n C.Bird \n";
+        self.refTextView.text = @"Tell me an animal that can fly.\n A. Tiger \n B. Panda\n C. Bird \n";
         self.refTextView.editable=NO;
     }
     else if ([self.coretype isEqual: @"en.scne.exam"])
     {
-        self.refTextView.text = @"Please answer the question based on the text below.\n\n Boy: I love summer because I can go to the beakch, Which seasons is your favourite?\n Girl: Spinrg, It's warm but it's not too hot. There are beautiful trees and flowers everywhere. \n\n Question: \nWhy does the boy like summer?\n Your answer: ____\n";
+        self.refTextView.text = @"Please answer the question based on the text below.\n Boy: I love summer because I can go to the beach, Which seasons is your favourite?\n Girl: Spring, It's warm but it's not too hot. There are beautiful trees and flowers everywhere. \nQuestion: \nWhy does the boy like summer?\n Your answer: ____\n";
         self.refTextView.editable=NO;
     }
     else if ([self.coretype isEqual: @"en.prtl.exam"])
     {
-        self.refTextView.text = @"Please describe the picture in English in 60 seconds according to the picture below. Your description can start like this:\n Look, what are these animals doing now in the zoo? ...\n";
+        //self.refTextView.text = @"Please describe the picture in English in 60 seconds according to the picture below. Your description can start like this:\n Look, what are these animals doing now in the zoo? ...\n";
         self.refTextView.editable=NO;
         [self.prtlImage setImage:[UIImage imageNamed:@"as.jpg"]];
     }
@@ -68,7 +75,7 @@
     {
         self.refTextView.text = @"unsupport";
         self.refTextView.editable=NO;
-        NSLog(@"暂未开放功能");
+        NSLog(@"unsupport");
     }
     resultTextView.text = @"";
 }
@@ -87,21 +94,19 @@
     
     if(err)
     {
-        NSLog(@"json解析失败：%@",err);
+        NSLog(@"Json parsing failure：%@",err);
     }
     
     NSString *overall = @"";
-    NSString *overallStr = @"";
-    
+
     if ([self.coretype isEqual: @"en.word.pron"])
     {
         NSMutableDictionary * resultdic2 = [resultDic objectForKey:@"result"];
         
         overall = [resultdic2 objectForKey:@"overall"];
-        overallStr = [NSString stringWithFormat:@"%@",overall];
         
-        NSString *str =@"Overall score: ";
-        resultForShow = [NSString stringWithFormat:@"%@%@", str,overallStr];
+        NSString *str =@"\n Overall score: ";
+        resultForShow = [NSString stringWithFormat:@"%@%@", str,overall];
         
         NSLog(@"############%@",resultForShow);
     }
@@ -110,22 +115,18 @@
         NSMutableDictionary * resultdic2 = [resultDic objectForKey:@"result"];
         
         NSString *overall = [resultdic2 objectForKey:@"overall"];
-        NSString *overallStr = [NSString stringWithFormat:@"%@",overall];
         
         NSMutableDictionary * resultdic3 = [resultdic2 objectForKey:@"fluency"];
         NSString *fluency = [resultdic3 objectForKey:@"overall"];
-        NSString *fluencyStr = [NSString stringWithFormat:@"%@",fluency];
         
         NSString *integrity = [resultdic2 objectForKey:@"integrity"];
-        NSString *integrityStr = [NSString stringWithFormat:@"%@",integrity];
         
         NSString *accuracy = [resultdic2 objectForKey:@"accuracy"];
-        NSString *accuracyStr = [NSString stringWithFormat:@"%@",accuracy];
 
-        NSLog(@"#%@#%@#%@#%@",overallStr,fluencyStr,integrityStr,accuracyStr);
+        NSLog(@"#%@#%@#%@#%@",overall,fluency,integrity,accuracy);
         
-        NSString *str =@"Overall score: ";
-        resultForShow = [NSString stringWithFormat:@"%@%@%@%@%@%@%@%@", str,overallStr,@"\nfluency score: ",fluency,@"\nintegrity score: ",integrityStr,@"\naccuracy score: ",accuracyStr];
+        NSString *str =@"\n\nOverall score: ";
+        resultForShow = [NSString stringWithFormat:@"%@%@%@%@%@%@%@%@", str,overall,@"\nfluency score: ",fluency,@"\nintegrity score: ",integrity,@"\naccuracy score: ",accuracy];
         
         NSLog(@"############%@",resultForShow);
     }
@@ -134,22 +135,18 @@
         NSMutableDictionary * resultdic2 = [resultDic objectForKey:@"result"];
         
         NSString *overall = [resultdic2 objectForKey:@"overall"];
-        NSString *overallStr = [NSString stringWithFormat:@"%@",overall];
-        
+
         NSMutableDictionary * resultdic3 = [resultdic2 objectForKey:@"fluency"];
         NSString *fluency = [resultdic3 objectForKey:@"overall"];
-        NSString *fluencyStr = [NSString stringWithFormat:@"%@",fluency];
         
         NSString *integrity = [resultdic2 objectForKey:@"integrity"];
-        NSString *integrityStr = [NSString stringWithFormat:@"%@",integrity];
         
         NSString *accuracy = [resultdic2 objectForKey:@"accuracy"];
-        NSString *accuracyStr = [NSString stringWithFormat:@"%@",accuracy];
 
-        NSLog(@"#%@#%@#%@#%@",overallStr,fluencyStr,integrityStr,accuracyStr);
+        NSLog(@"#%@#%@#%@#%@",overall,fluency,integrity,accuracy);
         
-        NSString *str =@"Overall score: ";
-        resultForShow = [NSString stringWithFormat:@"%@%@%@%@%@%@%@%@", str,overallStr,@"\nfluency score: ",fluency,@"\nintegrity score: ",integrityStr,@"\naccuracy score: ",accuracyStr];
+        NSString *str =@"\nOverall score: ";
+        resultForShow = [NSString stringWithFormat:@"%@%@%@%@%@%@%@%@", str,overall,@"\nfluency score: ",fluency,@"\nintegrity score: ",integrity,@"\naccuracy score: ",accuracy];
         
         NSLog(@"############%@",resultForShow);
         
@@ -159,10 +156,9 @@
         NSMutableDictionary * resultdic2 = [resultDic objectForKey:@"result"];
         
         overall = [resultdic2 objectForKey:@"overall"];
-        overallStr = [NSString stringWithFormat:@"%@",overall];
-        
-        NSString *str =@"Overall score: ";
-        resultForShow = [NSString stringWithFormat:@"%@%@", str,overallStr];
+
+        NSString *str =@"\n Overall score: ";
+        resultForShow = [NSString stringWithFormat:@"%@%@", str,overall];
         
         NSLog(@"############%@",resultForShow);
     }
@@ -171,29 +167,23 @@
         NSMutableDictionary * resultdic2 = [resultDic objectForKey:@"result"];
         
         NSString *Overall = [resultdic2 objectForKey:@"overall"];
-        NSString *OverallStr = [NSString stringWithFormat:@"%@",Overall];
-        
+
         NSMutableDictionary * details = [resultdic2 objectForKey:@"details"];
         
         NSMutableDictionary * multi_dim = [details objectForKey:@"multi_dim"];
         
         NSString *Grammar = [multi_dim objectForKey:@"grammar"];
-        NSString *GrammarStr = [NSString stringWithFormat:@"%@",Grammar];
-        
+    
         NSString *Content = [multi_dim objectForKey:@"cnt"];
-        NSString *ContentStr = [NSString stringWithFormat:@"%@",Content];
         
         NSString *Pronunciation = [multi_dim objectForKey:@"pron"];
-        NSString *PronunciationStr = [NSString stringWithFormat:@"%@",Pronunciation];
         
         NSString *Fluency = [multi_dim objectForKey:@"flu"];
-        NSString *FluencyStr = [NSString stringWithFormat:@"%@",Fluency];
-        
 
-        NSLog(@"#%@#%@#%@#%@#%@",OverallStr,GrammarStr,ContentStr,PronunciationStr,FluencyStr);
+        NSLog(@"#%@#%@#%@#%@#%@",Overall,Grammar,Content,Pronunciation,Fluency);
         
-        NSString *str =@"Overall score: ";
-        resultForShow = [NSString stringWithFormat:@"%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@", str,OverallStr,@"/4",@"\nGrammar score: ",GrammarStr,@"/4", @"\nContent score: ",ContentStr,@"/4", @"\nFluency score: ",FluencyStr,@"/4", @"\nPronunciation score: ",PronunciationStr,@"/4"];
+        NSString *str =@"\nOverall score: ";
+        resultForShow = [NSString stringWithFormat:@"%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@", str,Overall,@"/4",@"\nGrammar score: ",Grammar,@"/4", @"\nContent score: ",Content,@"/4", @"\nFluency score: ",Fluency,@"/4", @"\nPronunciation score: ",Pronunciation,@"/4"];
         
         NSLog(@"############%@",resultForShow);
         
@@ -204,36 +194,80 @@
         NSMutableDictionary * resultdic2 = [resultDic objectForKey:@"result"];
         
         NSString *Overall = [resultdic2 objectForKey:@"overall"];
-        NSString *OverallStr = [NSString stringWithFormat:@"%@",Overall];
-        
+
         NSMutableDictionary * details = [resultdic2 objectForKey:@"details"];
         
         NSMutableDictionary * multi_dim = [details objectForKey:@"multi_dim"];
         
         NSString *Grammar = [multi_dim objectForKey:@"grammar"];
-        NSString *GrammarStr = [NSString stringWithFormat:@"%@",Grammar];
         
         NSString *Content = [multi_dim objectForKey:@"cnt"];
-        NSString *ContentStr = [NSString stringWithFormat:@"%@",Content];
         
         NSString *Pronunciation = [multi_dim objectForKey:@"pron"];
-        NSString *PronunciationStr = [NSString stringWithFormat:@"%@",Pronunciation];
         
         NSString *Fluency = [multi_dim objectForKey:@"flu"];
-        NSString *FluencyStr = [NSString stringWithFormat:@"%@",Fluency];
         
 
-        NSLog(@"#%@#%@#%@#%@#%@",OverallStr,GrammarStr,ContentStr,PronunciationStr,FluencyStr);
+        NSLog(@"#%@#%@#%@#%@#%@",Overall,Grammar,Content,Pronunciation,Fluency);
         
-        NSString *str =@"Overall score: ";
-        resultForShow = [NSString stringWithFormat:@"%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@", str,OverallStr,@"/4",@"\nGrammar score: ",GrammarStr,@"/4", @"\nContent score: ",ContentStr,@"/4", @"\nFluency score: ",FluencyStr,@"/4", @"\nPronunciation score: ",PronunciationStr,@"/4"];
+        NSString *str =@"\nOverall score: ";
+        resultForShow = [NSString stringWithFormat:@"%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@", str,Overall,@"/4",@"\nGrammar score: ",Grammar,@"/4", @"\nContent score: ",Content,@"/4", @"\nFluency score: ",Fluency,@"/4", @"\nPronunciation score: ",Pronunciation,@"/4"];
         
         NSLog(@"############%@",resultForShow);
         
     }
     else if ([self.coretype isEqual: @"en.asr.rec"])
     {
-       
+        NSString *eof = [resultDic objectForKey:@"eof"];
+                
+        BOOL isEnd = [eof intValue];
+                
+        NSMutableDictionary * resultdic2 = [resultDic objectForKey:@"result"];
+                
+        NSMutableArray * Align = [resultdic2 objectForKey:@"align"];
+                
+        NSString * recText = @"";
+
+        NSString *text = @"";
+
+        NSString *sep = @"";
+                
+                
+        for (NSMutableDictionary *dict in Align)
+        {
+            text = [dict objectForKey:@"txt"];
+            sep = [dict objectForKey:@"sep"];
+
+            //NSLog(@"json txt:%@",text);
+            //NSLog(@"json sep:%@",sep);
+                    
+            recText = [recText stringByAppendingFormat:@"%@%@%@",text, sep, @" "];
+                                        
+        }
+
+        NSLog(@"\n\nReal-time recognition result %@",recText);
+                
+        //This is the final result
+        if( isEnd )
+        {
+            NSString *overall = [resultdic2 objectForKey:@"overall"];
+                    
+            NSMutableDictionary * resultdic3 = [resultdic2 objectForKey:@"fluency"];
+                    
+            NSString *fluency = [resultdic3 objectForKey:@"overall"];
+            NSString *speed = [resultdic3 objectForKey:@"speed"];
+            NSString *pause= [resultdic3 objectForKey:@"pause"];
+                    
+            NSString *pron = [resultdic2 objectForKey:@"pron"];
+          
+            NSString *str =@"\nOverall: ";
+            resultForShow = [NSString stringWithFormat:@"%@%@%@%@%@%@%@%@%@%@%@%@", str,overall,@"\nFluency score: ",fluency,@"\nSpeed(words/min): ",speed,@"\nNumber of pauses: ",pause,@"\nPronunciation score:", pron, @"\nRecognition result:", recText];
+        }
+        else
+        {        
+            resultForShow = [@"\n\n" stringByAppendingString: recText];
+        }
+
     }
     else {
         NSLog(@"unsupport");
@@ -244,6 +278,24 @@
 }
 
 - (IBAction)recordButtonPressed
+{
+    
+    if ([self.AudioSrc isEqual: @"OuterFeed"])
+    {
+        //External Recorder
+        [ self AssessmentOutFeedMode ];
+        
+    }
+    else if([self.AudioSrc isEqual: @"InnerRecorder"])
+    {
+        //SDK Built-in Recorder
+        [ self AssessmentInnerRecorderMode ];
+        
+    }
+}
+
+
+- (void)AssessmentInnerRecorderMode
 {
     
     //cs
@@ -278,7 +330,7 @@
             NSError *err;
             NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&err];
             if(err) {/*JSON解析失败*/
-                NSLog(@"JSON解析失败");
+                NSLog(@"Json parsing failure");
             }
             NSString *errId = [[dic objectForKey:@"errId"] stringValue];
             NSString *error = [dic objectForKey:@"error"];
@@ -297,7 +349,7 @@
             NSError *err;
             NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&err];
             if(err) {/*JSON解析失败*/
-                NSLog(@"JSON解析失败");
+                NSLog(@"Json parsing failure");
             }
             NSNumber *vad_status=[dic objectForKey:@"vad_status"];
             // vad_status==0 : no voice;
@@ -308,14 +360,14 @@
             {
                 [self.engineC stop];
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    self.resultTextView.text = result.text;
+                    self.resultTextView.text = [@"\n" stringByAppendingString:result.text];
                     [self.recordButton setTitle:@"record" forState: UIControlStateNormal];
                     //[self.indicatorView stopAnimating];
                 });
             }else
             {
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    self.resultTextView.text = result.text;
+                    self.resultTextView.text = [@"\n" stringByAppendingString:result.text];
                     //[self.indicatorView stopAnimating];
                 });
             }
@@ -327,11 +379,11 @@
         handler.onSoundIntensity = ^(NSString * _Nonnull eval, ChivoxAIEvalResult * _Nonnull result) {
             NSLog(@"sound:%@111111",result.text);
             dispatch_async(dispatch_get_main_queue(), ^{
-                self.resultTextView.text = result.text;
+                self.resultTextView.text = [@"\n" stringByAppendingString:result.text];
                 //[self.indicatorView stopAnimating];
             });
         };
-        ChivoxAIInnerRecorder *innerRecorder = [[ChivoxAIInnerRecorder alloc] init];//创建音频源
+        ChivoxAIInnerRecorder *innerRecorder = [[ChivoxAIInnerRecorder alloc] init];//Create audio source
         innerRecorder.recordParam.channel = 1;
         innerRecorder.recordParam.sampleRate = 16000;
         innerRecorder.recordParam.sampleBytes = 2;
@@ -341,11 +393,20 @@
         innerRecorder.recordParam.saveFile = filename;
 //        innerRecorder.recordParam.saveFile = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES).firstObject stringByAppendingString:[NSString stringWithFormat:@"/%@.wav",[NSString stringWithFormat:@"%@",@(NSDate.date.timeIntervalSince1970)].md5String]];
 
-        NSMutableDictionary *param = [[NSMutableDictionary alloc] init];//创建测评参数
+        NSMutableDictionary *param = [[NSMutableDictionary alloc] init];//create assessment parameter
         NSMutableDictionary *audio = [[NSMutableDictionary alloc] init];
         NSMutableDictionary *app = [[NSMutableDictionary alloc] init];
         NSMutableDictionary *vad = [[NSMutableDictionary alloc] init];
-        [param setObject:@1 forKey:@"soundIntensityEnable"];
+        
+        /*soundIntensityEnable*/
+        if ([self.coretype isEqual: @"en.asr.rec"])
+        {
+            [param setObject:@0 forKey:@"soundIntensityEnable"];
+        }else
+        {
+            [param setObject:@1 forKey:@"soundIntensityEnable"];
+        }
+
         [param setObject:@"cloud" forKey:@"coreProvideType"];
         /*audio音频数据传参*/
         [audio setObject:@"wav" forKey:@"audioType"];
@@ -435,6 +496,138 @@
         [recordButton setTitle:@"record" forState: UIControlStateNormal];
     }
 }
+
+//External recording mode: Read pre-recorded audio files for evaluation
+- (void)AssessmentOutFeedMode
+{
+    const char * button_title = [[recordButton titleForState:UIControlStateNormal] UTF8String];
+    if(strcmp(button_title, "record") == 0) {
+        //outter
+        ChivoxAIEvalResultListener *handler = [[ChivoxAIEvalResultListener alloc] init];//创建监听对象
+        handler.onEvalResult = ^(NSString * _Nonnull eval, ChivoxAIEvalResult * _Nonnull result) {
+            NSLog(@"result:%@ path:%@",result.text,result.recFilePath);
+            if (result.text == nil) {
+                NSLog(@"返回结果空！！！");
+                return;
+            }
+            /*获取本地播放文件路径*/
+            self.audioPath = result.recFilePath;
+            NSLog(@"%@filename",self.audioPath);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                //self.resultTextView.text = result.text;
+                [self showResult:result.text];
+                //[self.indicatorView stopAnimating];
+            });
+        };
+        handler.onError = ^(NSString * _Nonnull eval, ChivoxAIEvalResult * _Nonnull result) {
+            NSLog(@"error:%@111111",result.text);
+            NSData *jsonData = [result.text dataUsingEncoding:NSUTF8StringEncoding];
+            NSError *err;
+            NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&err];
+            if(err) {/*JSON解析失败*/
+                NSLog(@"JSON解析失败");
+            }
+            NSString *errId = [[dic objectForKey:@"errId"] stringValue];
+            NSString *error = [dic objectForKey:@"error"];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                self.resultTextView.text = result.text;
+                [self errAlert:error errID:errId];
+                //[self.indicatorView stopAnimating];
+            });
+        };
+        handler.onVad = ^(NSString * _Nonnull eval, ChivoxAIEvalResult * _Nonnull result) {
+            NSLog(@"vad:%@111111",result.text);
+        };
+        handler.onOther = ^(NSString * _Nonnull eval, ChivoxAIEvalResult * _Nonnull result) {
+            NSLog(@"other:%@111111",result.text);
+        };
+        handler.onSoundIntensity = ^(NSString * _Nonnull eval, ChivoxAIEvalResult * _Nonnull result) {
+            NSLog(@"sound:%@111111",result.text);
+        };
+        ChivoxAIOuterFeed * outfeed = [[ChivoxAIOuterFeed alloc] init];//创建音频源
+
+        NSMutableDictionary *param = [[NSMutableDictionary alloc] init];
+        NSMutableDictionary *audio = [[NSMutableDictionary alloc] init];
+        NSMutableDictionary *app = [[NSMutableDictionary alloc] init];
+        
+        [param setObject:@1 forKey:@"soundIntensityEnable"];
+        [param setObject:@"cloud" forKey:@"coreProvideType"];
+        /*audio音频数据传参*/
+        [audio setObject:@"wav" forKey:@"audioType"];
+        [audio setObject:@16000 forKey:@"sampleRate"];
+        [audio setObject:@2 forKey:@"sampleBytes"];
+        [audio setObject:@1 forKey:@"channel"];
+        param[@"audio"] = audio;
+        param[@"soundIntensityEnable"] = @1;
+        /*appUser传参*/
+        [app setValue:@"iOS-user" forKey:@"userId"];
+        param[@"app"] = app;
+        
+        /*内核request传参*/
+        /*英文内核*/
+        CoreRequestParam *coreRequest = [[CoreRequestParam alloc] init];
+
+        NSMutableDictionary *requestDic = [coreRequest requestDic_EN_Sent_pron];//英文句子评测
+
+        [requestDic setValue:[NSNumber numberWithInt:100] forKey:@"rank"];//总分分制
+        [requestDic setValue:[NSNumber numberWithInt:1] forKey:@"attachAudioUrl"];
+        [requestDic setValue:[NSNumber numberWithInt:1] forKey:@"precision"];//段落评分精度设置（0.5/1）
+        [param setObject:requestDic forKey:@"request"];
+        NSLog(@"%@", param);
+        
+        ChivoxAIRetValue *ret = nil;
+        NSLog(@"%d",[ret errId]);
+        NSLog(@"%@",ret);
+        [ChivoxAIRecorderNotify sharedInstance].onRecordStart = ^{
+        NSLog(@"start recorder");
+        };
+        [ChivoxAIRecorderNotify sharedInstance].onRecordStop = ^{
+        NSLog(@"stop recorder");
+        };
+        NSMutableString *tokenid = [[NSMutableString alloc] init];
+        ret = [self.engineC start:outfeed tokenId:tokenid param:param listener:handler];
+        NSLog(@"oooo%@",ret);
+        if(0 != [ret errId]){
+            NSLog(@"失败原因：%@",ret);//打印失败原因
+        }
+        resultTextView.text = @"";
+        //[indicatorView startAnimating];
+        [recordButton setTitle:@"stop" forState: UIControlStateNormal];
+        
+        int   bytes = 0;
+        char  buf[1024]={0};
+        FILE *file = NULL;
+        NSString *path = [[NSBundle mainBundle] pathForResource:@"Thank-you-for-coming-to-see-me" ofType:@"wav"];
+        const char * audiopath = [path UTF8String];
+        file = fopen(audiopath, "rb");//待评分音频地址
+        if(!file){
+            printf("read file error!\n");
+            return;
+        }
+//        fseek(file, 44, SEEK_SET);
+        while ((bytes = (int)fread(buf, 1, 1024, file))){
+//            ChivoxAIRetValue *value = [self.cloudengine feed:buf length:bytes];
+//            NSData *content=[NSData dataWithBytes:buf length:1024];
+//            ret = [self.cloudengine feed:content.bytes length:content.length];
+            ret = [self.engineC feed:buf length:bytes];
+            NSLog(@"csd:%@",ret);
+            if (0 != [ret errId]) {
+                // feed 调用失败, 一般是因为调用顺序错误. 请查看ret.errId, ret.error分析原因 // 建议在此调用 eval.cancel() 取消评测
+                NSLog(@"cs-%@",ret);//打印失败原因
+                [self.engineC cancel];
+                return;
+            }
+        }
+        // feed 调用成功
+        [self.engineC stop];
+        [recordButton setTitle:@"record" forState: UIControlStateNormal];
+        
+    } else {
+        [self.engineC stop];
+        [recordButton setTitle:@"record" forState: UIControlStateNormal];
+    }
+}
+
 
 - (IBAction)playbackButtonPressed
 {

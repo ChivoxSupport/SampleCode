@@ -46,6 +46,7 @@
 		867550AB2886525300A38E9A /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 867550AA2886525300A38E9A /* AVFoundation.framework */; };
 		867550AD2886526600A38E9A /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 867550AC2886526600A38E9A /* libc++.tbd */; };
 		867550B22886943C00A38E9A /* as.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 867550B12886943C00A38E9A /* as.jpg */; };
+		86CD981329640D48004A4245 /* Thank-you-for-coming-to-see-me.wav in Resources */ = {isa = PBXBuildFile; fileRef = 86CD981229640D48004A4245 /* Thank-you-for-coming-to-see-me.wav */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -128,6 +129,7 @@
 		867550AA2886525300A38E9A /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		867550AC2886526600A38E9A /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		867550B12886943C00A38E9A /* as.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = as.jpg; sourceTree = "<group>"; };
+		86CD981229640D48004A4245 /* Thank-you-for-coming-to-see-me.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = "Thank-you-for-coming-to-see-me.wav"; path = "AudioFile/Thank-you-for-coming-to-see-me.wav"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -189,6 +191,7 @@
 		867550152886507B00A38E9A /* ChivoxAssessment */ = {
 			isa = PBXGroup;
 			children = (
+				86CD980F29640BD1004A4245 /* AudioFile */,
 				867550162886507B00A38E9A /* AppDelegate.h */,
 				867550172886507B00A38E9A /* AppDelegate.m */,
 				867550192886507B00A38E9A /* SceneDelegate.h */,
@@ -305,6 +308,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		86CD980F29640BD1004A4245 /* AudioFile */ = {
+			isa = PBXGroup;
+			children = (
+				86CD981229640D48004A4245 /* Thank-you-for-coming-to-see-me.wav */,
+			);
+			name = AudioFile;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -408,6 +419,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				867550262886508600A38E9A /* LaunchScreen.storyboard in Resources */,
+				86CD981329640D48004A4245 /* Thank-you-for-coming-to-see-me.wav in Resources */,
 				867550B22886943C00A38E9A /* as.jpg in Resources */,
 				86755086288651ED00A38E9A /* onlineb.png in Resources */,
 				867550232886508600A38E9A /* Assets.xcassets in Resources */,

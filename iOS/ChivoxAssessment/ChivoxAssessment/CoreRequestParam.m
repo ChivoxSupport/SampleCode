@@ -170,9 +170,18 @@
 - (NSMutableDictionary *)requestDic_EN_Asr_rec
 {
     NSMutableDictionary *requestDic = [[NSMutableDictionary alloc] init];
-    [requestDic setValue:@"en.sent.rec" forKey:@"coreType"];
+    [requestDic setValue:@"en.asr.rec" forKey:@"coreType"];
     [requestDic setValue:@"en.asr.G4" forKey:@"res"];
     [requestDic setValue:[NSNumber numberWithInt:1] forKey:@"attachAudioUrl"];
+    
+    NSMutableDictionary *resultDic =[[NSMutableDictionary alloc] init];
+    NSMutableDictionary *detailDic =[[NSMutableDictionary alloc] init];
+
+    [detailDic setValue:[NSNumber numberWithInt:1] forKey:@"ext_cur_wrd"];//return the recognized words and evaluation scores in real-time
+    
+    [resultDic setValue:detailDic forKey:@"details"];
+    [requestDic setValue:resultDic forKey:@"result"];
+    
     return requestDic;
 }
 

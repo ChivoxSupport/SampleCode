@@ -14,9 +14,9 @@
             filePath = "ChivoxAssessment/CSMainViewController.m"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "251"
-            endingLineNumber = "251"
-            landmarkName = "-recordButtonPressed"
+            startingLineNumber = "303"
+            endingLineNumber = "303"
+            landmarkName = "-AssessmentInnerRecorderMode"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -30,9 +30,9 @@
             filePath = "ChivoxAssessment/CSMainViewController.m"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "255"
-            endingLineNumber = "255"
-            landmarkName = "-recordButtonPressed"
+            startingLineNumber = "307"
+            endingLineNumber = "307"
+            landmarkName = "-AssessmentInnerRecorderMode"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -46,9 +46,9 @@
             filePath = "ChivoxAssessment/CSMainViewController.m"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "279"
-            endingLineNumber = "279"
-            landmarkName = "-recordButtonPressed"
+            startingLineNumber = "331"
+            endingLineNumber = "331"
+            landmarkName = "-AssessmentInnerRecorderMode"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -62,9 +62,9 @@
             filePath = "ChivoxAssessment/CSMainViewController.m"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "282"
-            endingLineNumber = "282"
-            landmarkName = "-recordButtonPressed"
+            startingLineNumber = "334"
+            endingLineNumber = "334"
+            landmarkName = "-AssessmentInnerRecorderMode"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -72,15 +72,15 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "BEE05628-259B-4845-872D-1D711909F561"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ChivoxAssessment/CSMainViewController.m"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "378"
-            endingLineNumber = "378"
-            landmarkName = "-recordButtonPressed"
+            startingLineNumber = "439"
+            endingLineNumber = "439"
+            landmarkName = "-AssessmentInnerRecorderMode"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -94,8 +94,8 @@
             filePath = "ChivoxAssessment/CSMainViewController.m"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "31"
-            endingLineNumber = "31"
+            startingLineNumber = "38"
+            endingLineNumber = "38"
             landmarkName = "-viewDidLoad"
             landmarkType = "7">
          </BreakpointContent>

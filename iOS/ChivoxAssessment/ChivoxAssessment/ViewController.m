@@ -96,6 +96,7 @@
     CSMainViewController *mainVC = [CSMainViewController new];
     mainVC.coretype = [NSString stringWithFormat:@"en.word.pron"];
     mainVC.engineC = self.cloudengine;
+    mainVC.AudioSrc = [NSString stringWithFormat:@"InnerRecorder"];
 
     mainVC.modalTransitionStyle=UIModalTransitionStyleCrossDissolve;
     mainVC.modalPresentationStyle=UIModalPresentationFullScreen;
@@ -108,6 +109,8 @@
     CSMainViewController *mainVC = [CSMainViewController new];
     mainVC.coretype = [NSString stringWithFormat:@"en.sent.pron"];
     mainVC.engineC = self.cloudengine;
+    mainVC.AudioSrc = [NSString stringWithFormat:@"InnerRecorder"];
+    
     //模态画面风格
     mainVC.modalTransitionStyle=UIModalTransitionStyleCrossDissolve;
     mainVC.modalPresentationStyle=UIModalPresentationFullScreen;
@@ -119,6 +122,8 @@
     CSMainViewController *mainVC = [CSMainViewController new];
     mainVC.coretype = [NSString stringWithFormat:@"en.pred.score"];
     mainVC.engineC = self.cloudengine;
+    mainVC.AudioSrc = [NSString stringWithFormat:@"InnerRecorder"];
+    
     //模态画面风格
     mainVC.modalTransitionStyle=UIModalTransitionStyleCrossDissolve;
     mainVC.modalPresentationStyle=UIModalPresentationFullScreen;
@@ -130,6 +135,8 @@
     CSMainViewController *mainVC = [CSMainViewController new];
     mainVC.coretype = [NSString stringWithFormat:@"en.choc.score"];
     mainVC.engineC = self.cloudengine;
+    mainVC.AudioSrc = [NSString stringWithFormat:@"InnerRecorder"];
+    
     //模态画面风格
     mainVC.modalTransitionStyle=UIModalTransitionStyleCrossDissolve;
     mainVC.modalPresentationStyle=UIModalPresentationFullScreen;
@@ -142,6 +149,8 @@
     CSMainViewController *mainVC = [CSMainViewController new];
     mainVC.coretype = [NSString stringWithFormat:@"en.scne.exam"];
     mainVC.engineC = self.cloudengine;
+    mainVC.AudioSrc = [NSString stringWithFormat:@"InnerRecorder"];
+    
     //模态画面风格
     mainVC.modalTransitionStyle=UIModalTransitionStyleCrossDissolve;
     mainVC.modalPresentationStyle=UIModalPresentationFullScreen;
@@ -153,6 +162,8 @@
     CSMainViewController *mainVC = [CSMainViewController new];
     mainVC.coretype = [NSString stringWithFormat:@"en.prtl.exam"];
     mainVC.engineC = self.cloudengine;
+    mainVC.AudioSrc = [NSString stringWithFormat:@"InnerRecorder"];
+    
     //模态画面风格
     mainVC.modalTransitionStyle=UIModalTransitionStyleCrossDissolve;
     mainVC.modalPresentationStyle=UIModalPresentationFullScreen;
@@ -165,6 +176,8 @@
     CSMainViewController *mainVC = [CSMainViewController new];
     mainVC.coretype = [NSString stringWithFormat:@"en.asr.rec"];
     mainVC.engineC = self.cloudengine;
+    mainVC.AudioSrc = [NSString stringWithFormat:@"InnerRecorder"];
+    
     //模态画面风格
     mainVC.modalTransitionStyle=UIModalTransitionStyleCrossDissolve;
     mainVC.modalPresentationStyle=UIModalPresentationFullScreen;
@@ -173,6 +186,15 @@
 
 - (IBAction)HButtonAction:(id)sender {
     NSLog(@"H");
+    CSMainViewController *mainVC = [CSMainViewController new];
+    mainVC.coretype = [NSString stringWithFormat:@"en.sent.pron"];
+    mainVC.engineC = self.cloudengine;
+    mainVC.AudioSrc = [NSString stringWithFormat:@"OuterFeed"]; //External Recorder
+     
+    //模态画面风格
+    mainVC.modalTransitionStyle=UIModalTransitionStyleCrossDissolve;
+    mainVC.modalPresentationStyle=UIModalPresentationFullScreen;
+    [self presentViewController:mainVC animated:YES completion:nil];
 }
 
 
