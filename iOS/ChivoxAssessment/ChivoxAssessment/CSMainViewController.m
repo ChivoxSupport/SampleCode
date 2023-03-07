@@ -78,8 +78,17 @@
         NSLog(@"unsupport");
     }
     resultTextView.text = @"";
+    [self micPermissionRequest];
 }
 
+-(void)micPermissionRequest
+{
+    if (TARGET_OS_SIMULATOR == 0)
+    {
+        AVAudioSession* sharedSession = [AVAudioSession sharedInstance];
+        [sharedSession requestRecordPermission:^(BOOL granted) {    }];
+    }
+}
 
 - (void) showResult: (NSString *) result
 {

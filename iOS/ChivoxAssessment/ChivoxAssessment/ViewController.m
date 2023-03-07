@@ -46,7 +46,7 @@
     NSMutableDictionary *vad = [self vadInit];
     cfg[@"vad"] = vad;
     
-    [self.cloudengine setLogFile:@"/Users/chensong/Desktop/log1.txt"];
+    [self.cloudengine setLogFile:@"/Users/chivox/Desktop/log123.txt"];
 
     //
     ChivoxAIEngineCreateCallback *cb = [ChivoxAIEngineCreateCallback
@@ -216,7 +216,7 @@
 /*Enabling Debug Logs*/
 - (NSMutableDictionary *)profLog{
     NSMutableDictionary *logDic = [[NSMutableDictionary alloc] init];
-    NSString *logFileName = @"/Users/chensong/Desktop/log.txt";
+    NSString *logFileName = @"/Users/chivox/Desktop/log.txt";
     [logDic setValue:[NSNumber numberWithInt:0] forKey:@"enable"];
     [logDic setValue:logFileName forKey:@"output"];
     return logDic;

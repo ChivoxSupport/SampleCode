@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		86063ED629B718A60063E739 /* aiengine.provision in Resources */ = {isa = PBXBuildFile; fileRef = 86063ED529B718A60063E739 /* aiengine.provision */; };
 		867550182886507B00A38E9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 867550172886507B00A38E9A /* AppDelegate.m */; };
 		8675501B2886507B00A38E9A /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 8675501A2886507B00A38E9A /* SceneDelegate.m */; };
 		8675501E2886507B00A38E9A /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8675501D2886507B00A38E9A /* ViewController.m */; };
@@ -18,7 +19,6 @@
 		8675503E2886508700A38E9A /* ChivoxAssessmentUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8675503D2886508700A38E9A /* ChivoxAssessmentUITests.m */; };
 		86755079288651ED00A38E9A /* CSMainViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8675504E288651EC00A38E9A /* CSMainViewController.xib */; };
 		8675507A288651ED00A38E9A /* CSMainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8675505C288651EC00A38E9A /* CSMainViewController.m */; };
-		8675507B288651ED00A38E9A /* aiengine.provision in Resources */ = {isa = PBXBuildFile; fileRef = 8675505E288651EC00A38E9A /* aiengine.provision */; };
 		8675507C288651ED00A38E9A /* vad.0.13.bin in Resources */ = {isa = PBXBuildFile; fileRef = 8675505F288651EC00A38E9A /* vad.0.13.bin */; };
 		8675507D288651ED00A38E9A /* libCAIEngine.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 86755062288651EC00A38E9A /* libCAIEngine.a */; };
 		8675507E288651ED00A38E9A /* libaiengine.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 86755063288651EC00A38E9A /* libaiengine.a */; };
@@ -67,6 +67,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		86063ED529B718A60063E739 /* aiengine.provision */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = aiengine.provision; sourceTree = "<group>"; };
 		867550132886507B00A38E9A /* ChivoxAssessment.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ChivoxAssessment.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		867550162886507B00A38E9A /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		867550172886507B00A38E9A /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -99,7 +100,6 @@
 		8675505A288651EC00A38E9A /* ChivoxAIEvalResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChivoxAIEvalResult.h; sourceTree = "<group>"; };
 		8675505B288651EC00A38E9A /* ChivoxAIEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChivoxAIEngine.h; sourceTree = "<group>"; };
 		8675505C288651EC00A38E9A /* CSMainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSMainViewController.m; sourceTree = "<group>"; };
-		8675505E288651EC00A38E9A /* aiengine.provision */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = aiengine.provision; sourceTree = "<group>"; };
 		8675505F288651EC00A38E9A /* vad.0.13.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = vad.0.13.bin; sourceTree = "<group>"; };
 		86755062288651EC00A38E9A /* libCAIEngine.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libCAIEngine.a; sourceTree = "<group>"; };
 		86755063288651EC00A38E9A /* libaiengine.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libaiengine.a; sourceTree = "<group>"; };
@@ -255,7 +255,7 @@
 		8675505D288651EC00A38E9A /* License File */ = {
 			isa = PBXGroup;
 			children = (
-				8675505E288651EC00A38E9A /* aiengine.provision */,
+				86063ED529B718A60063E739 /* aiengine.provision */,
 				8675505F288651EC00A38E9A /* vad.0.13.bin */,
 				86755061288651EC00A38E9A /* aiengine-ios */,
 			);
@@ -427,7 +427,6 @@
 				8675507C288651ED00A38E9A /* vad.0.13.bin in Resources */,
 				86755084288651ED00A38E9A /* word_score.jpeg in Resources */,
 				8675508B288651ED00A38E9A /* sent_score.jpeg in Resources */,
-				8675507B288651ED00A38E9A /* aiengine.provision in Resources */,
 				8675508F288651ED00A38E9A /* offlineb.png in Resources */,
 				8675508C288651ED00A38E9A /* online.png in Resources */,
 				8675508A288651ED00A38E9A /* pred_exam.jpeg in Resources */,
@@ -438,6 +437,7 @@
 				86755089288651ED00A38E9A /* MIC-record.png in Resources */,
 				86755090288651ED00A38E9A /* back.png in Resources */,
 				8675508D288651ED00A38E9A /* MIC-normal.png in Resources */,
+				86063ED629B718A60063E739 /* aiengine.provision in Resources */,
 				86755079288651ED00A38E9A /* CSMainViewController.xib in Resources */,
 				86755085288651ED00A38E9A /* WechatIMG19.jpeg in Resources */,
 			);
