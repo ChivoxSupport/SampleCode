@@ -1,0 +1,73 @@
+﻿using System;
+namespace ChivoxAIEngine
+{
+internal class Chivoxba38757dfb9abe4a02ec49ba6e4711c7 : Chivox21ae98cf2aceb75fb36a9ce79cc94c1d
+{
+public const int Chivoxf2598ad29f5796ae17edafd06648a552 = 1;
+public const int Chivox5ccaee6ca1a51f7e936ce0abdd68bd69 = 2;
+public const int Chivox9aabcdb3341d058077596ed7654b1634 = 1;
+public const int Chivoxccb8e05caaf25c97962e8eeb1f5a4521 = 2;
+public const int Chivox292025dc47b0faef15dc386eebb4a675 = 3;
+public const int Chivoxf83907ffc9e73fc940c7054ab7102959 = 4;
+public const int Chivoxf98a1ec83ff56bf4b7efd2be90ad89b9 = 5;
+public const int Chivox7c831efe5f467b2b41eac427c76d1a5e = 6;
+public const int Chivoxe9099862af5052d7f2e17d960191d799 = 7;
+#if UNITY_ANDROID && !UNITY_EDITOR
+private readonly Chivox21ae98cf2aceb75fb36a9ce79cc94c1d Chivoxf7eb8924f6abb32f3b196f70d8ccedbf = new Chivox0fe79ecc253221d9f4d18629d756bc0a();
+#elif UNITY_IOS && !UNITY_EDITOR
+private readonly Chivox21ae98cf2aceb75fb36a9ce79cc94c1d Chivoxf7eb8924f6abb32f3b196f70d8ccedbf = new Chivox7f288e5dd0c5d3fdc2f761c69c60ecb4();
+#else
+        private readonly Chivox21ae98cf2aceb75fb36a9ce79cc94c1d Chivoxf7eb8924f6abb32f3b196f70d8ccedbf = new Chivox9f784d2e80bf5f2f0c4b670ebe7bfaba();
+#endif
+public IntPtr Chivox5be48295a18e467ff9ae78ca451a6470(string Chivox4e9345d32e9eb3081414c942f8242d0e)
+{
+return Chivoxf7eb8924f6abb32f3b196f70d8ccedbf.Chivox5be48295a18e467ff9ae78ca451a6470(Chivox4e9345d32e9eb3081414c942f8242d0e);
+}
+public void Chivox85754b00137d6cc647305bd6bdc0e3ed(IntPtr Chivox91b5e080d4fcc88459040ee5120abbb3)
+{
+Chivoxf7eb8924f6abb32f3b196f70d8ccedbf.Chivox85754b00137d6cc647305bd6bdc0e3ed(Chivox91b5e080d4fcc88459040ee5120abbb3);
+}
+public int Chivox38c00b508ba8cdb67f863eb28858af0d(IntPtr Chivox91b5e080d4fcc88459040ee5120abbb3, string Chivoxee0d828139a28617efd9505068b27daf, out string Chivoxa57041fbe1c915012eb15b3e882fd38b, Chivoxd161509b47344be06dc395657bb1ec1b.Chivox5192fcf9c412a141a1f50a57e24c8510 Chivoxafeac0457b7123b4e517408b1115dc2e)
+{
+return Chivoxf7eb8924f6abb32f3b196f70d8ccedbf.Chivox38c00b508ba8cdb67f863eb28858af0d(Chivox91b5e080d4fcc88459040ee5120abbb3, Chivoxee0d828139a28617efd9505068b27daf, out Chivoxa57041fbe1c915012eb15b3e882fd38b, Chivoxafeac0457b7123b4e517408b1115dc2e);
+}
+public int Chivoxb26bd2a9506e7271cd9118ae4a254418(IntPtr Chivox91b5e080d4fcc88459040ee5120abbb3, byte[] Chivox14be6b37673cd40e800f16d819c6423c, int Chivox758bbb72081a31489a0243e30dc051b2)
+{
+return Chivoxf7eb8924f6abb32f3b196f70d8ccedbf.Chivoxb26bd2a9506e7271cd9118ae4a254418(Chivox91b5e080d4fcc88459040ee5120abbb3, Chivox14be6b37673cd40e800f16d819c6423c, Chivox758bbb72081a31489a0243e30dc051b2);
+}
+public int Chivoxd819074a0b974099598d2d789d53a0cb(IntPtr Chivox91b5e080d4fcc88459040ee5120abbb3)
+{
+return Chivoxf7eb8924f6abb32f3b196f70d8ccedbf.Chivoxd819074a0b974099598d2d789d53a0cb(Chivox91b5e080d4fcc88459040ee5120abbb3);
+}
+public int Chivoxa7a031b129d49d6da0adf1996e3168f5(IntPtr Chivox91b5e080d4fcc88459040ee5120abbb3)
+{
+return Chivoxf7eb8924f6abb32f3b196f70d8ccedbf.Chivoxa7a031b129d49d6da0adf1996e3168f5(Chivox91b5e080d4fcc88459040ee5120abbb3);
+}
+public string Chivox086e3fa0bbbfa1f84c5323b47f481f78(IntPtr Chivox91b5e080d4fcc88459040ee5120abbb3, int Chivoxd04b747eb68c12eae558b25271f983ed)
+{
+return Chivoxf7eb8924f6abb32f3b196f70d8ccedbf.Chivox086e3fa0bbbfa1f84c5323b47f481f78(Chivox91b5e080d4fcc88459040ee5120abbb3, Chivoxd04b747eb68c12eae558b25271f983ed);
+}
+public string Chivox086e3fa0bbbfa1f84c5323b47f481f78(IntPtr Chivox91b5e080d4fcc88459040ee5120abbb3, int Chivoxd04b747eb68c12eae558b25271f983ed, string Chivox22915968357421a04ffa7e1324c5f464)
+{
+return Chivoxf7eb8924f6abb32f3b196f70d8ccedbf.Chivox086e3fa0bbbfa1f84c5323b47f481f78(Chivox91b5e080d4fcc88459040ee5120abbb3, Chivoxd04b747eb68c12eae558b25271f983ed, Chivox22915968357421a04ffa7e1324c5f464);
+}
+public string Chivoxf30480003d4330d9551c0206a6d22aa4()
+{
+return Chivoxf7eb8924f6abb32f3b196f70d8ccedbf.Chivoxf30480003d4330d9551c0206a6d22aa4();
+}
+public int Chivoxb010022345363c5670222786d6868899()
+{
+return Chivoxf7eb8924f6abb32f3b196f70d8ccedbf.Chivoxb010022345363c5670222786d6868899();
+}
+public string Chivox2f254f00377c6489d2d8ca5b973e9b66()
+{
+return Chivoxf7eb8924f6abb32f3b196f70d8ccedbf.Chivox2f254f00377c6489d2d8ca5b973e9b66();
+}
+public void Chivox2e7571d909703e5b6b526cf44df6a167()
+{
+}
+public void Chivoxc67fe4304e2bc58bd190df0b815fd32e()
+{
+}
+}
+}
