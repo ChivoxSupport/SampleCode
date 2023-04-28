@@ -1,4 +1,4 @@
-package com.example.chivoxdemo;
+package com.example.chivoxonline;
 import android.app.Application;
 import com.chivox.aiengine.Engine;
 

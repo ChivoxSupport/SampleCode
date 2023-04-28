@@ -1,4 +1,4 @@
-package com.example.chivoxdemo;
+package com.example.chivoxonline;
 
 import java.util.HashMap;
 

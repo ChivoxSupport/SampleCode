@@ -1,4 +1,4 @@
-package com.example.chivoxdemo;
+package com.example.chivoxonline;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity
     private Button btnPrtl;
     private Button btnASR;
 
-
+    private Button btnExternalRecorder;
     private static String[] PERMISSION_AUDIO = {
             Manifest.permission.RECORD_AUDIO
     };
@@ -79,6 +79,7 @@ public class MainActivity extends AppCompatActivity
         btnScne = (Button) this.findViewById(R.id.mBtn_Scne);
         btnPrtl = (Button) this.findViewById(R.id.mBtn_Prtl);
         btnASR = (Button) this.findViewById(R.id.mBtn_ASR);
+        btnExternalRecorder = (Button) this.findViewById(R.id.mBtn_ExternalRecorder);
 
         //Get permission
         verifyAudioPermissions(MainActivity.this);
@@ -201,6 +202,17 @@ public class MainActivity extends AppCompatActivity
                 startActivity(intent);
             }
         });
+
+        btnExternalRecorder.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view) {
+                Intent intent;
+                intent = new Intent(MainActivity.this, OuterFeedActivity.class);
+                startActivity(intent);
+            }
+        });
+
     }
 
 
@@ -264,7 +276,7 @@ public class MainActivity extends AppCompatActivity
                     @Override
                     public void onSuccess(Engine engine)
                     {
-                        //Created successfully, please save the engine instance for subsequent use
+                        //Created successfully, save the engine instance for subsequent use
                         aiengine = engine;
 
                         Log.e(TAG, "create aiengine success" + engine);
@@ -289,7 +301,7 @@ public class MainActivity extends AppCompatActivity
                     @Override
                     public void onFail(RetValue err)
                     {
-                        //Creation failed, please check e.errId and e.error to analyze the cause.
+                        //Creation failed, please check e.errId and e.error to analyze the reason.
                         Log.e("TAG", "create aiengine fail" + err.errId + ", " + err.error);
 
                         runOnUiThread(new Runnable() {

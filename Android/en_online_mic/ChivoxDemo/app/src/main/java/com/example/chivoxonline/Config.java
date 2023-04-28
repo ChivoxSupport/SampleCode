@@ -1,11 +1,11 @@
-package com.example.chivoxdemo;
+package com.example.chivoxonline;
 
 public class Config {
 
 
     //Chivox authorized account
-    public static String appKey = "Authorized appKey";
-    public static String secretKey = "Authorized secretKey";
+    public static String appKey = "your appKey";
+    public static String secretKey = "your secretKey";
 
     //User Id. It is recommended to set it to easily distinguish the assessment data of different users.
     public static String userId="ChivoxDemo520";
@@ -46,6 +46,8 @@ public class Config {
 
     //Asr
     public static  String coreTypeAsr = "en.asr.rec";
-    public static  String DisplayTextAsr = "Please speak English after clicking Record.";
+    public static  String DisplayTextAsr = "Please speak English after clicking Record button.";
 
+    //External Recorder mode
+    public static String DisplayTextOuterFeed = "After clicking the evaluate button, SDK will read an audio file for evaluation";
 }

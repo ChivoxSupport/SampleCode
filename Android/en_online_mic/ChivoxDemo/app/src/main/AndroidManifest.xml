@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.chivoxdemo">
+    package="com.example.chivoxonline">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
@@ -16,30 +16,33 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Design.Light"
-        android:name=".MyApplication">
-        <activity android:name=".MainActivity">
+        android:name="com.example.chivoxonline.MyApplication">
+        <activity android:name="com.example.chivoxonline.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".WordSentPredActivity">
+        <activity android:name="com.example.chivoxonline.WordSentPredActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.chivoxdemo.MainActivity" />
+                android:value="com.example.chivoxonline.MainActivity" />
         </activity>
         <activity
-            android:name=".ChoiceActivity">
+            android:name="com.example.chivoxonline.ChoiceActivity">
         </activity>
         <activity
-            android:name=".SituationalDialogueActivity">
+            android:name="com.example.chivoxonline.SituationalDialogueActivity">
         </activity>
         <activity
-            android:name=".DescribeThePictureActivity">
+            android:name="com.example.chivoxonline.DescribeThePictureActivity">
         </activity>
         <activity
-            android:name=".AsrActivity">
+            android:name="com.example.chivoxonline.AsrActivity">
+        </activity>
+        <activity
+            android:name="com.example.chivoxonline.OuterFeedActivity">
         </activity>
 
     </application>

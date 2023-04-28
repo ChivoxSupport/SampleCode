@@ -117,12 +117,12 @@
                 />
 
             <Button
-                android:id="@+id/mBtn_txt_others"
+                android:id="@+id/mBtn_ExternalRecorder"
                 android:layout_width="160dp"
                 android:layout_height="160dp"
                 android:layout_marginLeft="10dp"
                 android:gravity="center"
-                android:text="Others"
+                android:text="External Recorder"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 />

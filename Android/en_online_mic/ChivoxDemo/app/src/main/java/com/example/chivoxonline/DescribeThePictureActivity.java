@@ -1,9 +1,9 @@
-package com.example.chivoxdemo;
-
+package com.example.chivoxonline;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,35 +29,34 @@ import java.util.concurrent.Executors;
 
 import static android.content.ContentValues.TAG;
 
-public class SituationalDialogueActivity extends AppCompatActivity
+public class DescribeThePictureActivity extends AppCompatActivity
 {
     private TextView QuestionView;
 
     private boolean playing = false;
+    private boolean recording = false;
 
     private Engine aiengine = null;
-    private boolean recording = false;
 
     private String recFilePath;
 
-    private int rankScne = 4;
+    private Context context;
+
+    private int rankPrtl = 4;
 
     private Boolean isShowAnswer = false;
-
-    private Context context;
 
     private Button recordButton;
     private Button playbackButton;
     private Button referenceAnswerButton;
+    private TextView jsonResultTextView;
     private ActionBar actionBar;
 
-    private TextView jsonResultTextView;
+    private AudioPlayer player;
 
     private ExecutorService workerThread = Executors.newFixedThreadPool(1);
 
     private MyApplication app;
-
-    private AudioPlayer player;
 
     public void runOnWorkerThread(Runnable runnable)
     {
@@ -68,7 +67,7 @@ public class SituationalDialogueActivity extends AppCompatActivity
     {
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.situationaldialogue);
+        setContentView(R.layout.speakingwithpicture);
 
         actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -76,13 +75,14 @@ public class SituationalDialogueActivity extends AppCompatActivity
         context = this;
 
         QuestionView = (TextView) findViewById(R.id.textViewQuestion);
-        QuestionView.setText(Config.DisplayTextScne);
+        QuestionView.setText(Config.DisplayTextPrtl);
 
         recordButton = (Button) findViewById(R.id.buttonRecord);
         playbackButton = (Button) findViewById(R.id.buttonPlay);
         referenceAnswerButton = (Button) findViewById(R.id.buttonReferenceAnswer);
 
         jsonResultTextView = (TextView) findViewById(R.id.textViewJsonResult);
+        jsonResultTextView.setMovementMethod(ScrollingMovementMethod.getInstance());
 
         player = AudioPlayer.sharedInstance();
 
@@ -91,6 +91,7 @@ public class SituationalDialogueActivity extends AppCompatActivity
         aiengine = app.getEngine();
 
         bindEvents();
+
 
     }
 
@@ -122,10 +123,10 @@ public class SituationalDialogueActivity extends AppCompatActivity
         {
             player.cancel();
         }
-        Log.e(TAG, "SituationalDialogueActivity destroy");
+
+        Log.e(TAG, "SpeakingWithPictureActivity destroy");
         super.onDestroy();
     }
-
 
     private void bindEvents() {
         recordButton.setOnClickListener(new View.OnClickListener() {
@@ -162,7 +163,7 @@ public class SituationalDialogueActivity extends AppCompatActivity
                                     JSONObject vad = new JSONObject();
                                     vad.put("vadEnable", 0);
                                     vad.put("refDuration", 3);
-                                    vad.put("speechLowSeek",20);
+                                    vad.put("speechLowSeek",30);
                                     param.put("vad", vad);
                                 }
                                 { //Set user ID
@@ -180,9 +181,9 @@ public class SituationalDialogueActivity extends AppCompatActivity
                                 }
                                 { //set kernel parameters
                                     JSONObject request = new JSONObject();
-                                    request.put("coreType", Config.coreTypeScne);
+                                    request.put("coreType", Config.coreTypePrtl);
 
-                                    JSONObject refTextObject = new JSONObject(Config.RefTextScne);
+                                    JSONObject refTextObject = new JSONObject(Config.RefTextPrtl);
                                     request.put("refText", refTextObject);
 
 
@@ -193,7 +194,7 @@ public class SituationalDialogueActivity extends AppCompatActivity
                                     result.put("details", use_inherit_rank);
                                     request.put("result",result);
 
-                                    request.put("rank",rankScne);
+                                    request.put("rank",rankPrtl);
                                     request.put("precision",1);
                                     request.put("attachAudioUrl",1);
                                     param.put("request", request);
@@ -210,7 +211,7 @@ public class SituationalDialogueActivity extends AppCompatActivity
                             File file = new File(AIEngineHelper.getAviFile(context));
                             Log.e(TAG, "file" + file);
                             innerRecorder.recordParam.saveFile = file;     //If you need to save the audio file locally, please set the path
-                            //innerRecorder.recordParam.duration = 3000;   ////Set the recording time(Unit: milliseconds), optional
+                            innerRecorder.recordParam.duration = 60000;   //Set the recording time(Unit: milliseconds), optional
                             //make a request
                             StringBuilder tokenId = new StringBuilder(); // tokenId - the identification of this assessment task
                             Log.e(TAG, "tokenId" + tokenId);
@@ -246,7 +247,7 @@ public class SituationalDialogueActivity extends AppCompatActivity
                                             String fluencyScore = null;
                                             String PronunciationScore = null;
 
-                                            StringBuilder result = new StringBuilder();
+                                            StringBuilder recResult = new StringBuilder();
 
                                             try {
                                                 final JSONObject returnObj = new JSONObject(evalResult.text().toString());
@@ -261,12 +262,12 @@ public class SituationalDialogueActivity extends AppCompatActivity
                                                 fluencyScore = resultJSONObject.getJSONObject("details").getJSONObject("multi_dim").getString("flu");
                                                 PronunciationScore = resultJSONObject.getJSONObject("details").getJSONObject("multi_dim").getString("pron");
 
-                                                result.append("Assessment result:");
-                                                result.append("\nOverall score:" + overallScore + "/" + String.valueOf(rankScne));
-                                                result.append("\nGrammar score:" + grammarScore + "/" + String.valueOf(rankScne));
-                                                result.append("\nContent score:" + contentScore + "/" + String.valueOf(rankScne));
-                                                result.append("\nFluency score:" + fluencyScore + "/" + String.valueOf(rankScne));
-                                                result.append("\nPronunciation score:" + PronunciationScore + "/" + String.valueOf(rankScne));
+                                                recResult.append("Assessment result:");
+                                                recResult.append("\nOverall score:" + overallScore + "/" + String.valueOf(rankPrtl));
+                                                recResult.append("\nGrammar score:" + grammarScore + "/" + String.valueOf(rankPrtl));
+                                                recResult.append("\nContent score:" + contentScore + "/" + String.valueOf(rankPrtl));
+                                                recResult.append("\nFluency score:" + fluencyScore + "/" + String.valueOf(rankPrtl));
+                                                recResult.append("\nPronunciation score:" + PronunciationScore + "/" + String.valueOf(rankPrtl));
 
                                             } catch (Exception e) {
                                                 e.printStackTrace();
@@ -276,10 +277,9 @@ public class SituationalDialogueActivity extends AppCompatActivity
                                             runOnUiThread(new Runnable() {
                                                 @Override
                                                 public void run() {
-                                                    jsonResultTextView.setText(result.toString());
+                                                    jsonResultTextView.setText(recResult.toString());
                                                 }
                                             });
-
                                         }
                                     });
                                 }
@@ -397,9 +397,13 @@ public class SituationalDialogueActivity extends AppCompatActivity
 
                         }
                     });
-                } else {
-                    if (recordButton.getText().equals(getText(R.string.stop))) {
+                }
+                else
+                    {
+                    if (recordButton.getText().equals(getText(R.string.stop)))
+                    {
                         recordButton.setText(R.string.record);
+
                         runOnWorkerThread(new Runnable() {
                             public void run() {
                                 RetValue ret = aiengine.stop();
@@ -469,8 +473,7 @@ public class SituationalDialogueActivity extends AppCompatActivity
             }
         });
 
-        referenceAnswerButton.setOnClickListener(new View.OnClickListener()
-        {
+        referenceAnswerButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view)
             {
@@ -478,8 +481,10 @@ public class SituationalDialogueActivity extends AppCompatActivity
                 {
                     isShowAnswer = true;
                     referenceAnswerButton.setText(R.string.txt_hide_answer);
-                    jsonResultTextView.setText(Config.DisplayReferenceAnswerScne);
-                } else {
+                    jsonResultTextView.setText(Config.DisplayReferenceAnswerPrtl);
+                }
+                else
+                {
                     isShowAnswer = false;
                     referenceAnswerButton.setText(R.string.txt_show_answer);
                     jsonResultTextView.setText("");
@@ -489,12 +494,12 @@ public class SituationalDialogueActivity extends AppCompatActivity
 
     }
 
-
     public AudioPlayer.Listener playerListener = new AudioPlayer.Listener() {
 
         @Override
         public void onStarted(AudioPlayer audioPlayer) {
             playing = true;
+
         }
 
         @Override
@@ -505,6 +510,7 @@ public class SituationalDialogueActivity extends AppCompatActivity
         @Override
         public void onError(AudioPlayer audioPlayer, String s) {
             playing = false;
+
         }
     };
 
