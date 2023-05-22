@@ -1,210 +1,339 @@
-
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset=utf-8 />
-        <title>Recorder-English sentence evaluation</title>
-        <script type="text/javascript" src="https://sdk.cloud.chivox.com/chivoxsdk-js/v4.0/Resources/jquery/jquery-1.6.2.min.js"></script>
-		<script type="text/javascript" src="https://sdk.cloud.chivox.com/chivoxsdk-js/v6.0/chivox.min.js"></script>
-		
-		<style type="text/css">
-            body { text-align: center; }
-            #container { background: #eee; width: 800px; min-height: 600px; margin: 0 auto; text-align: left; }
-            #containerInner { position: relative; padding: 20px; }
-			/*Button style settings*/
-			#btn button{ width:50px; height:32px; line-height:32px; border:0; padding:0; margin:0; cursor:pointer;}
-			#btn button{ *margin-right:5px;}
-			#btn .r_play{ background:#8AD7FB url(images/icon.png) no-repeat 7px -184px;}	
-			#btn .r_record{ background:#8AD7FB url(images/icon.png) no-repeat -147px -186px;}
-			#btn .r_replay{ background:#CCC url(images/icon.png) no-repeat -89px -184px; cursor:default;}
-			
-			#aiPanel .r_replay{ background:#8AD7FB url(images/icon.png) no-repeat -89px -184px;}
-			#aiPanel .replayOn{ background:#8AD7FB url(images/icon.png) no-repeat -42px -184px;}
-			#aiPanel .recordProgressBar{ width:166px; height:10px; border:1px solid #61A7F5; margin-top:10px; font-size:1px; line-height:1px; display:none;}
-			#aiPanel .recordProgressBar .value{ background:#8AD7FB; width:0; height:10px; font-size:1px; line-height:1px;}
-		</style>
-		
-	</head>
-    <body>
-        <div id="container">
-            <div id="containerInner">
-                <div id="content">
-                    <h1>The application of English sentence scoring (By recorder)</h1>
-                    <p class="currentWord">
-                    </p>
-                    <div id="btn" style="height:50px;">
-                        <div>
-                            <button class="r_play" id="r_play"></button>
-                            <button class="r_record" id="r_record"></button>
-                            <button class="r_replay" id="r_replay"></button>
-                        </div>
-                    </div>
-                    <div id="chivox-recorder"></div>
-                    <p id="scoreResult">
-		                Overall score: <span class="pron">0</span><br />
-		                Fluency: <span class="fluency">0</span><br />
-		                Accuracy: <span class="accuracy">0</span><br />
-		                Integrity: <span class="integrity">0</span><br />
-                    </p>
-                    <!-- #content end  -->
-                </div>
-            </div>
-        </div>
-    </body>
-<script type="text/javascript">
-$(document).ready(function(){
-    var refText = "I want to know the past and present of Hong Kong.";
-    $("#content .currentWord").html(refText);
 
-    /**************Init SDK-start**************/
-    /*Create player*/
-    var player = new Html5Player();
-    /*Create recorder*/
-    var recorder = new Html5Recorder({
-    	server:'wss://cloud.chivox.com',
-        appKey: 'your appKey',
-        sigurl: 'php/sig.php',  //Signature service address
-        onInit: function (mess) {
-            console.log("onInit success");
-        }, 
-        onError: function (err) {
-            console.log("onError:"+err);
-        }
-    });    
-    /**************Init SDK-end**************/
+<head>
+	<meta charset="UTF-8">
+	<title>Chivox Speech Assessment</title>
+
+	<script src="js/jquery.min.js"></script>
+	<script type="text/javascript" src="js/swiper-3.4.0.jquery.min.js" ></script>
+	<link rel="stylesheet" href="css/swiper-3.2.7.min.css" />
+	<link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+	<div class="container">
+		<div class="title"><B>Chivox Speech Assessment</B></div>
+		<!-- swiper1 菜单-->
+		<div class="swiper-container swiper1">
+			<div class="swiper-wrapper" id="tabBars"></div>
+		</div>
+		<!-- swiper2 -->
+		<div class="swiper-container swiper2">
+			<div class="swiper-wrapper" style="width: 100%;height: 100%;">
+				<div class="swiper-slide swiper-no-swiping">
+					<div class="buju">
+						<div class="pron"> </div>
+						<div class="text">apple</div>
+						<div class="pron">UK ['æp(ə)l]　US [ˈæpl]</div>
+					</div>
+				</div>
+				<div class="swiper-slide swiper-no-swiping">
+					<div class="buju">
+						<div class="text">Thank you for coming to see me.</div>
+					</div>
+				</div>
+				<div class="swiper-slide swiper-no-swiping">
+					<div class="buju">
+						<div class="text">Happiness is not about being immortal nor having food or rights in one's hand. </br> It's about having each tiny wish come true, </br> or having something to eat when you are hungry or having someone's love when you need love.						</div>
+					</div>
+				</div>
+				<div class="swiper-slide swiper-no-swiping">
+					<div class="buju">
+						<div class="pron">Tell me an animal that can fly.</div>
+						<div class="text"><div class="sel">A. Tiger.</br>B. Panda.</br>C. Bird.</br></div></div>
+					</div>
+				</div>
+				<div class="swiper-slide swiper-no-swiping">
+					<div class="buju">
+						<div class="pron">Please answer the question based on the text below. </br></br> Boy: I love summer because I can go to the beach. Which seasons is your favourite? </br> Girl: Spring. It's not too hot. There are beautiful trees and flowers everywhere. </br></div>
+						<div class="text"></br> Question: Why does the boy like summer? </br> Your answer: ...</div>
+						<div class="showbtn">
+							<div><button class="btnAns" onclick="showAnswer(1)">Show reference answer</button></div>
+						</div>
+					</div>
+				</div>
+				<div class="swiper-slide swiper-no-swiping">
+					<div class="buju">
+						<div class="pron">Please describe the picture in English in 60 seconds according to the picture below. Your description can start like this:</div>
+						<div class="text">Look, what are these animals doing now in the zoo? ...</div>
+						<div class="showbtn">
+							<div><img class="img"  src="img/animals.png"/></div>
+							<div><button class="btnAns" onclick="showAnswer(2)">Show reference answer</button></div>
+						</div>
+					</div>
+				</div>
+				<div class="swiper-slide swiper-no-swiping">
+					<div class="buju">
+						<div class="pron">Please say a paragraph in English ...</div>
+						<div class="text" id="asrRec"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="answer">
+			<p id="dialogue">
+				Answer1: He likes summer because he can go to the beach.</br>
+				Answer2: Because he can go to the beach.</br>
+				Answer3: So he can go to the beach.</br>
+				Answer4: He can go to the beach.
+			</p>
+			<p id="picture">
+				Answer1: Look, what are these animals doing now in the zoo? Four elephants are drinking water. Two cute pandas are sleeping on the tree. A monkey is sitting over there and eating a banana. And a tiger is swimming in the water. Two giraffes are running!</br>
+				Answer2: Look, what are these animals doing now in the zoo? There are four elephants in the zoo and they are drinking water. Two cute pandas are sleeping on the tree. A monkey is eating a banana. And a tiger is swimming in the water. Two giraffes are running!</br>
+				Answer3: Look, what are these animals doing now in the zoo? Four elephants are drinking water. Two fat pandas are on the tree and they are sleeping. A monkey is sitting over there and eating a banana. And a tiger is swimming in the water. Two giraffes are running!
+			</p>
+		</div>
+
+		<div class="result" id="tableData"></div>
+
+		<!--record or playback button-->
+		<div class="btn" id="luyinBtn" style="display: none;">
+			<div class="txt"><text>tap to end</text></div>
+			<div onclick="stopRecord()" class="bowen">
+				<img src="https://api.chivoxapp.com/tstest/chivoxapp/uniapp/wave.gif" />
+			</div>
+		</div>
+		<div class="btn" id="initBtn">
+			<div class="txt"><text>tap to start</text></div>
+			<div onclick="record()" class="roundBtn">
+				<img src="https://api.chivoxapp.com/tstest/chivoxapp/uniapp/luyin@2x.png" />
+			</div>
+			<div onclick="playBack()" class="roundBack">
+				<img src="img/playBack.png" />
+			</div>
+		</div>
 
 
-	/************Recording button click event*************/
-	var recordFlag = true;
-    $("#r_record").click(function(){
-	    if(recordFlag){
-			$('#r_record').css("background","#8AD7FB url(images/icon.png) no-repeat -186px -186px");
-	        recordFlag = false;
-			recorder.showVolumeBar();/*Display the waveform diagram, and you can comment it out if you don't need it*/
-	        recorder.stopRecord();
-			recorder.setMicVolume(1);
-	        recorder.record({
-	            duration:8000,
-	            playDing: true,
-	            serverParams:{
-	                coreType: "en.sent.score",
-	                refText: refText,
-	                rank: 100,
-	                userId: "tester",
-	                attachAudioUrl: 1
-	            },
-	            onRecordIdGenerated:function (tokenId) {
-	                console.log("========onRecordIdGenerated start========");
-	                var lastTokenID = tokenId.tokenId;
-	                console.log(JSON.stringify(tokenId));
-	                console.log("========onRecordIdGenerated end========");
-	            },
-	            onStart:function () {
-	                console.log("onStart");
-				    $("#scoreResult .pron").html(0);
-				    $("#scoreResult .fluency").html(0);
-				    $("#scoreResult .accuracy").html(0);
-				    $("#scoreResult .integrity").html(0);
-	            },        
-	            onStop:function () {
-					$('#r_record').css("background","#8AD7FB url(images/icon.png) no-repeat -147px -186px");
-	                console.log("onStop");
-	            },
-	            onScore:function (score) {
-					$('#r_replay').css("background","#8AD7FB url(images/icon.png) no-repeat -89px -184px");
-					$('#r_replay').css("cursor","pointer");
-					
-	            	recordFlag = true;
-	            	recorder.stopRecord();
-	                console.log(score.result);
-				    $("#scoreResult .pron").html(score.result.overall);
-				    $("#scoreResult .fluency").html(score.result.fluency.overall);
-				    $("#scoreResult .accuracy").html(score.result.accuracy);
-				    $("#scoreResult .integrity").html(score.result.integrity);
-	            },
-	            onScoreError:function (err) {
-					$('#r_record').css("background","#8AD7FB url(images/icon.png) no-repeat -147px -186px");
-	            	recordFlag = true;
-	            	recorder.stopRecord();
-	            	recorder.reset();
-	                alert(JSON.stringify(err));
-	            }
-	        })
-	    }else{
-			$('#r_record').css("background","#8AD7FB url(images/icon.png) no-repeat -147px -186px");
-	    	recordFlag = true;
-	    	recorder.stopRecord();
-	        console.log("record stop!")
+	</div>
+
+<script type="text/javascript" src="js/phoneticConvert.js" ></script>
+<script type="text/javascript" src="js/data.js" ></script>
+<script type="text/javascript" src="https://sdk.cloud.chivox.com/chivoxsdk-js/v6.0/chivox.min.js"></script>
+<script>
+	var sdkStatus = false;
+	var recording = false;
+	var audioUrl = "";
+	/********************CHIVOX SDK*********************/
+	let player = new Html5Player();
+	let sdk = new Html5Recorder({
+	   	appKey: "your appKey",  /* Appkey authorized by Chivox. */
+	   	sigurl: "php/sig.php", /* Interface address for obtaining identity information. */
+	   	server: "wss://cloud.chivox.com",
+	    onInit: function (mess) {
+	        sdkStatus = true;
+	        //Create engine success!
+	        console.log("Init success!");
+	    }, 
+	    onError: function (err) {
+	        //Create engine fail!
+	        sdkStatus = false;
+	        alert(JSON.stringify(err));
+	        console.log("Sdk onError:" + err);
 	    }
-    });
+	});
 
-	/*****************Playback recording************************/
-	var replayFlag=true;
-    $(".r_replay").click(function(){
-    	if(replayFlag){
-			$('#r_replay').css("background","#8AD7FB url(images/icon.png) no-repeat -42px -184px");
-			$('#r_replay').css("cursor","pointer");
-	    	replayFlag=false;
-	    	recorder.startReplay({
-	    		onStop:function () {
-					$('#r_replay').css("background","#8AD7FB url(images/icon.png) no-repeat -89px -184px");
-	    			replayFlag=true;
-	                console.log("startReplay");
-	            }
-	    	});
-	    }else{
-			$('#r_replay').css("background","#8AD7FB url(images/icon.png) no-repeat -89px -184px");
-	    	replayFlag=true;
-	    	recorder.stopReplay();
-	    }
-    });
-
-    /*****************Play standard audio***************/
-    var playStatus = true;
-    $(".r_play").click(function(){
-    if(playStatus){
-		$('#r_play').css("background","#8AD7FB url(images/icon.png) no-repeat -42px -184px");
-    	playStatus=false;
-    	player.setVolume(0.9);/*Set the volume of playing audio, 0~1 */
-        player.load({
-            url:"audio/sent.mp3",
-            success:function () {
-                console.log("player start success.");
-                player.play({
-                    position:0,	//Play start position
-                    duration:8000,
-                    onStop:function () {
-						$('#r_play').css("background","#8AD7FB url(images/icon.png) no-repeat 7px -184px");
-    					playStatus=true;
-                        console.log("player onStop");
-                        console.log("Volume:"+player.getVolume());
-                    },
-                    onStart:function () {
-                        console.log("player onStart");
-                    },
-					error:function(err){
-						$('#r_play').css("background","#8AD7FB url(images/icon.png) no-repeat 7px -184px");
-						console.log(err);
+	/*Record*/
+	function record(){
+		player.stop();
+		//alert("currentPage: "+currentPage);
+		$("#tableData").html(""); //clear old data
+        $("#initBtn").css("display","none");
+        $("#luyinBtn").css("display","inherit");
+		if(sdkStatus && !recording){
+			recording = true;
+			sdk.record({
+				playDing: false,
+			    audioType: "wav",
+			    duration: contentList[currentPage-1].duration,
+			    serverParams: contentList[currentPage-1].serverParams,
+			    onRecordIdGenerated: function(tokenId) {
+			        console.log("tokenId: "+JSON.stringify(tokenId));
+			    },
+			    onStart: function () {
+			        console.log("========onStart========");
+			    },        
+			    onStop: function () {
+			        console.log("========onStop========");
+			    },     
+			    onInternalScore: function (score) {
+			    	//asr
+			        console.log("========onInternalScore========");
+					let recStr = '';
+					if(score.hasOwnProperty("result")){
+						let align = score.result.align;
+						align.forEach(function(sub){
+							recStr += sub.txt + sub.sep +' ';
+						})
 					}
-                })
-            },
-            error:function (err) {
-				$('#r_play').css("background","#8AD7FB url(images/icon.png) no-repeat 7px -184px");
-    			playStatus=true;
-            	player.stop(); /*Manually stop audio playback*/
-            	player.reset(); /*Reset player status*/
-                console.log("player error:" + JSON.stringify(err));
-            }
-        })
-    }else{
-		$('#r_play').css("background","#8AD7FB url(images/icon.png) no-repeat 7px -184px");
-    	playStatus=true;
-        player.stop();
-    }
-    });
-    
-});
+			    	$("#asrRec").html(recStr); 
+			    },
+			    onScore: function (score) {
+			    	//result
+			        console.log(score);
+			    	recording = false;
+			        $("#initBtn").css("display","inherit");
+			        $("#luyinBtn").css("display","none");
+			    	var tableHTML = "";
+			    	if(score.hasOwnProperty("result")){
+			    		//use to playback audio
+						let subUrl = score.audioUrl.split(":");
+						let backUrl = subUrl[1].split("/");
+						audioUrl ='https://' + subUrl[0] + '/' + backUrl[1] + '.mp3'; /* Address of playback audio */
+						console.log("audioUrl: "+audioUrl);
+						var tableHTML1 = "<table><tr><th>Overall score</th>";
+						var tableHTML2 = "<tr><td>"+ score.result.overall +"</td>";
+						if(currentPage == 1){
+							let rec = score.result.details.word[0].rec; 
+							let recAry = rec.split(" "); 
+							let stressAry = score.result.details.word[0].stress;
+							let accent = score.result.details.word[0].accent;
+							let labStr = '';
+							let recStr = '';
+							/* stress */
+							for(let s=0; s<stressAry.length; s++){
+								if(stressAry[s].ref == 1){
+									labStr += "'";
+								}
+								let strAry = stressAry[s].char.split("_"); 
+								for(let l=0; l<strAry.length; l++){
+									if(accent == 2){
+										labStr += phoneticConvertUS(strAry[l]); //K.K.(US)
+									}else{
+										labStr += phoneticConvert(strAry[l]); //IPA88(UK)
+									}
+								}
+							}
+							for(let i=0; i<recAry.length; i++){
+								if(accent == 2){
+									recStr += phoneticConvertUS(recAry[i]); //K.K.(US)
+								}else{
+									recStr += phoneticConvert(recAry[i]); //IPA88(UK)
+								}
+							}
+							tableHTML1 += "<th>Standard pronunciation</th><th>Your pronunciation</th></tr>";
+							tableHTML2 += "<td>"+ labStr +"</td><td>"+ recStr +"</td></tr></table>";
+						}else if(currentPage == 2 || currentPage == 3){
+							let fluency = score.result.fluency.overall;
+							let accuracy = score.result.accuracy;
+							let integrity = score.result.integrity;
+							tableHTML1 += "<th>Fluency</th><th>Accuracy</th><th>Integrity</th>";
+							tableHTML2 += "<td>"+ fluency +"</td><td>"+ accuracy +"</td><td>"+ integrity +"</td>";
+							if(currentPage == 2){
+								let sentDetails = score.result.details;
+								let error = '';
+								let miss = '';
+								let more = '';
+								for(let i=0; i<sentDetails.length; i++){
+									let wordObj = sentDetails[i];
+									switch(wordObj.is_err){
+										case 0:
+											break;
+										case 1:
+											if(wordObj.rec != "UNK"){
+												more += wordObj.rec+" ";
+											}
+											break;
+										case 2:
+											miss += wordObj.lab+" ";
+											break;
+										case 3:
+											error += wordObj.lab+" ";
+											
+										break;
+									}
+								}
+								tableHTML1 += "<th>Misread</th><th>Missing reading</th><th>Superfluous reading</th>";
+								tableHTML2 += "<td>"+ error +"</td><td>"+ miss +"</td><td>"+ more +"</td>";
+							}
+							tableHTML1 += "</tr>";
+							tableHTML2 += "</tr></table>";
+						}else if(currentPage == 4){
+							/*let fluency = score.result.fluency.overall;
+							let speed = score.result.fluency.speed;
+							tableHTML1 += "<th>Fluency</th><th>Speed</th></tr>";
+							tableHTML2 += "<td>"+ fluency +"</td><td>"+ speed +"</td></tr></table>";*/
+						}else if(currentPage == 5 || currentPage == 6){
+							tableHTML2 = "";
+							tableHTML2 = "<tr><td>"+ score.result.overall +"/4</td>";
+							let fluency = score.result.details.multi_dim.flu;
+							let grammar = score.result.details.multi_dim.grammar;
+							let content = score.result.details.multi_dim.cnt;
+							let pron = score.result.details.multi_dim.pron;
+							tableHTML1 += "<th>Fluency</th><th>Pronunciation</th><th>Grammar</th><th>Content</th></tr>";
+							tableHTML2 += "<td>"+ fluency +"/4</td><td>"+ pron +"/4</td><td>"+ grammar +"/4</td><td>"+ content +"/4</td></tr></table>";
+						}else if(currentPage == 7){
+							let recStr = '';
+							let align = score.result.align;
+							align.forEach(function(sub){
+								recStr += sub.txt + sub.sep +' ';
+							})
+					    	$("#asrRec").html(recStr); 
+							let pron = score.result.pron;
+							let fluency = score.result.fluency.overall;
+							let speed = score.result.fluency.speed;
+							tableHTML1 += "<th>Fluency</th><th>Pronunciation</th><th>Speed</th></tr>";
+							tableHTML2 += "<td>"+ fluency +"</td><td>"+ pron +"</td><td>"+ speed +"</td></tr></table>";
+						}
+			    	}else{
+			        	alert("No result score: "+ score);
+			    	}
+			    	tableHTML = tableHTML1 + tableHTML2;
+			    	$("#tableData").html(tableHTML); 
+
+			    },
+			    onScoreError: function (err) {
+			    	sdk.stopRecord();
+			    	recording = false;
+			        $("#initBtn").css("display","inherit");
+			        $("#luyinBtn").css("display","none");
+			        alert(JSON.stringify(err));
+			    }
+			});
+
+		}else{
+			alert("Please initialize the SDK first.");
+		}
+	}
+
+	function stopRecord(){
+		sdk.stopRecord();
+		recording = false;
+        $("#initBtn").css("display","inherit");
+        $("#luyinBtn").css("display","none");
+	}
+
+	function playBack(){
+		if(audioUrl.length != 0 && audioUrl !=""){
+			play(audioUrl);
+		}else{
+			alert("Please complete the recording before playback.");
+		}
+	}
+	function play(url){
+		player.load({
+			url: url,
+			success: function (code,message) {
+				player.stop();
+				player.play({
+					position: 0,
+					onStop: function() {
+				        console.log("player onStop");
+		            },
+		            onStart: function () {
+				        console.log("player onStart");
+		            }
+		        })        
+		    },
+		    error: function(err) {
+			    console.log("player error:" + JSON.stringify(err));
+			    alert("player error");
+			}
+		})
+	}
 </script>
 
+</body>
 
 </html>
