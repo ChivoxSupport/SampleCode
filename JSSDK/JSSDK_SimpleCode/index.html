@@ -14,13 +14,13 @@
 <body>
 	<div class="container">
 		<div class="title"><B>Chivox Speech Assessment</B></div>
-		<!-- swiper1 菜单-->
+		<!-- swiper1 menu-->
 		<div class="swiper-container swiper1">
 			<div class="swiper-wrapper" id="tabBars"></div>
 		</div>
 		<!-- swiper2 -->
 		<div class="swiper-container swiper2">
-			<div class="swiper-wrapper" style="width: 100%;height: 100%;">
+			<div class="swiper-wrapper" style="width: 100%;height: 500px;">
 				<div class="swiper-slide swiper-no-swiping">
 					<div class="buju">
 						<div class="pron"> </div>
@@ -69,6 +69,35 @@
 						<div class="text" id="asrRec"></div>
 					</div>
 				</div>
+				<div class="swiper-slide swiper-no-swiping">
+					<div class="buju">
+						<div class="pron">Please read the following words correctly(no order required)</div>
+						<table style="font-weight:bold;width:60%; margin: 0 auto; padding-top: 50px;">
+							<tr>
+								<td style="width: 10%;height:20px;">color</td> <!--<text style="font-weight:normal;">100</text></br> -->
+								<td style="width: 30%;text-align:right;">map</td>
+								<td style="width: 30%;"></td>
+								<td style="width: 30%;">green</td>
+							</tr>
+							<tr>
+								<td></td> <td>morning</td> <td style="text-align:right;">are</td> <td></td>
+							</tr>
+							<tr>
+								<td>evening</td> <td></td> <td>wonderful</td> <td>music</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+				
+				<div class="swiper-slide swiper-no-swiping">
+					<div class="buju">
+						<div class="text">He finds it very hard to travel around the big city.</div>
+						<div class="pron" id="tableData3" style="display: flex; justify-content: center; ">
+							
+						</div>
+					</div>
+				</div>
+				
 			</div>
 		</div>
 
@@ -87,6 +116,7 @@
 		</div>
 
 		<div class="result" id="tableData"></div>
+		<div class="result" style="margin-top: 15px;" id="tableData2"></div>
 
 		<!--record or playback button-->
 		<div class="btn" id="luyinBtn" style="display: none;">
@@ -137,11 +167,13 @@
 	/*Record*/
 	function record(){
 		player.stop();
-		//alert("currentPage: "+currentPage);
 		$("#tableData").html(""); //clear old data
+		$("#tableData2").html("");
+		$("#tableData3").html("");
         $("#initBtn").css("display","none");
         $("#luyinBtn").css("display","inherit");
 		if(sdkStatus && !recording){
+			//alert(JSON.stringify(contentList[currentPage-1].serverParams));
 			recording = true;
 			sdk.record({
 				playDing: false,
@@ -158,16 +190,27 @@
 			        console.log("========onStop========");
 			    },     
 			    onInternalScore: function (score) {
-			    	//asr
 			        console.log("========onInternalScore========");
-					let recStr = '';
-					if(score.hasOwnProperty("result")){
-						let align = score.result.align;
-						align.forEach(function(sub){
-							recStr += sub.txt + sub.sep +' ';
-						})
+			    	//asr
+					if(currentPage == 7){
+						let recStr = '';
+						if(score.hasOwnProperty("result")){
+							let align = score.result.align;
+							align.forEach(function(sub){
+								recStr += sub.txt + sub.sep +' ';
+							})
+						}
+						$("#asrRec").html(recStr); 
+					}else if(currentPage == 9){
+						let realHtml = "";
+						if(score.hasOwnProperty("result")){
+							let align = score.result.details;
+							align.forEach(function(sub){
+								realHtml += "<div style='padding:3px;'>" + sub.score + "</br>" + sub.text + "</div>";
+							})
+						}
+						$("#tableData3").html(realHtml); 
 					}
-			    	$("#asrRec").html(recStr); 
 			    },
 			    onScore: function (score) {
 			    	//result
@@ -275,13 +318,81 @@
 							let speed = score.result.fluency.speed;
 							tableHTML1 += "<th>Fluency</th><th>Pronunciation</th><th>Speed</th></tr>";
 							tableHTML2 += "<td>"+ fluency +"</td><td>"+ pron +"</td><td>"+ speed +"</td></tr></table>";
+						}else if(currentPage == 8){
+							let details = score.result.details.words;
+							let error = '';
+							let miss = '';
+							let more = '';
+							var tableHTML3 = "<table><tr>";
+							var tableHTML4 = "<tr>";
+							for(let i=0; i<details.length; i++){
+								let wordObj = details[i];
+								tableHTML3 += "<th>"+ wordObj.char +"</th>";
+								tableHTML4 += "<td>"+ wordObj.score +"</td>";
+								switch(wordObj.is_err){
+									case 0:
+										break;
+									case 1:
+										more += wordObj.char+" ";
+										break;
+									case 2:
+										miss += wordObj.char+" ";
+										break;
+									case 3:
+										error += wordObj.char+" ";
+										
+									break;
+								}						
+							}
+							tableHTML1 += "<th>Misread</th><th>Missing reading</th><th>Superfluous reading</th>";
+							tableHTML2 += "<td>"+ error +"</td><td>"+ miss +"</td><td>"+ more +"</td>";
+							tableHTML1 += "</tr>";
+							tableHTML2 += "</tr></table>";
+							tableHTML3 += "</tr>";
+							tableHTML4 += "</tr></table>";
+							let tableData = tableHTML3 + tableHTML4;
+							$("#tableData2").html(tableData); 	
+						}else if(currentPage == 9){
+							let details = score.result.details;
+							let fluency = score.result.fluency.overall;
+							let accuracy = score.result.accuracy;
+							let integrity = score.result.integrity;
+							tableHTML1 += "<th>Fluency</th><th>Accuracy</th><th>Integrity</th>";
+							tableHTML2 += "<td>"+ fluency +"</td><td>"+ accuracy +"</td><td>"+ integrity +"</td>";
+							let miss = '';
+							let more = '';
+							for(let i=0; i<details.length; i++){
+								let wordObj = details[i];
+								switch(wordObj.is_err){
+									case 0:
+										break;
+									case 1:
+										more += wordObj.text+" ";
+										break;
+									case 2:
+										miss += wordObj.text+" ";
+										break;
+										
+									break;
+								}						
+							}
+							tableHTML1 += "<th>Missing reading</th><th>Superfluous reading</th>";
+							tableHTML2 += "<td>"+ miss +"</td><td>"+ more +"</td>";
+							tableHTML1 += "</tr>";
+							tableHTML2 += "</tr></table>";
 						}
-			    	}else{
+						
+						
+						
+						
+						
+						
+						
+					}else{
 			        	alert("No result score: "+ score);
 			    	}
 			    	tableHTML = tableHTML1 + tableHTML2;
 			    	$("#tableData").html(tableHTML); 
-
 			    },
 			    onScoreError: function (err) {
 			    	sdk.stopRecord();

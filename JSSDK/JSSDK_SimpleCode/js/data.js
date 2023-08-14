@@ -15,11 +15,17 @@ var tabBars = [{
     'name': 'Situational Dialogue',
     'id': 'scne'
 }, {
-    'name': 'Speaking with pictures',
+    'name': 'Describe the picture',
     'id': 'prtl'
 }, {
     'name': 'Asr',
     'id': 'asrRec'
+}, {
+    'name': 'Vocabulary',
+    'id': 'vocabulary'
+}, {
+    'name': 'Real-time Reading',
+    'id': 'realTime'
 }]
 /*Menu style*/
 function setCurrentSlide(ele, index) {
@@ -50,7 +56,7 @@ var swiper1 = new Swiper('.swiper1', {
         var n = swiper.activeIndex;
         setCurrentSlide($(".swiper1 .swiper-slide").eq(n), n);
     },
-                    slidesPerView: 8,//slider容器能够同时显示的slides数量
+                    slidesPerView: 9,//slider容器能够同时显示的slides数量
                     paginationClickable: true,//true点击分页器的指示点分页器会控制Swiper切换。
                     spaceBetween: 0,//slide之间的距离（单位px）
                 });
@@ -70,6 +76,8 @@ swiper1.slides.each(function(index, val) {
             $("#luyinBtn").css("display","none");
         }
         $("#tableData").html(""); 
+        $("#tableData2").html(""); 
+		$("#tableData3").html("");
         audioUrl = "";
     });
 });
@@ -206,5 +214,35 @@ var contentList = [{
             }
         },
         userId: "chivoxJssdk"
+    }
+}, {
+    trans:"",
+    text: '',
+    pron:'',
+    coreType:'en.vocabs.pron',
+    duration: 10000,
+    serverParams: {
+        coreType:  "en.vocabs.pron",
+        attachAudioUrl:  1,
+		reftext: "color map green morning are evening wonderful music",
+		rank: 100,
+        userId: "chivoxJssdk"
+    }
+}, {
+    trans: '',
+    text: 'He finds it very hard to travel around the big city.',
+    pron:'',
+    duration: 10000,
+    serverParams: {
+        coreType:'en.rltm.score',
+        refText:"He finds it very hard to travel around the big city.",
+        rank: 100,
+        attachAudioUrl: 1,
+        userId: "chivoxJssdk",
+        result: {
+            details:{
+                ext_cur_wrd: 1
+            }
+        }
     }
 }];
