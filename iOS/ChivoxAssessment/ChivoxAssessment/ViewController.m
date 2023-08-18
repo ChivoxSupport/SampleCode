@@ -36,6 +36,7 @@
     [cloud setObject:@1 forKey:@"protocol"];
     [cloud setObject:@20 forKey:@"connectTimeout"];
     [cloud setObject:@10 forKey:@"serverTimeout"];
+	[cloud setObject:@"wss://cloud.chivox.com:443" forKey:@"server"];
     cfg[@"cloud"] = cloud;
 
     /*Log*/
