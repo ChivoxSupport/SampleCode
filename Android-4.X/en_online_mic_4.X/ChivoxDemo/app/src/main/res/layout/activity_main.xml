@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp"
+        >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:orientation="horizontal"
+            >
+            <Button
+                android:id="@+id/mBtn_word"
+                android:layout_width="160dp"
+                android:layout_height="160dp"
+                android:gravity="center"
+                android:text="@string/txt_word"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                />
+
+            <Button
+                android:id="@+id/mBtn_sentence"
+                android:layout_width="160dp"
+                android:layout_height="160dp"
+                android:layout_marginLeft="10dp"
+                android:gravity="center"
+                android:text="@string/txt_sentence"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            >
+            <Button
+                android:id="@+id/mBtn_paragraph"
+                android:layout_width="160dp"
+                android:layout_height="160dp"
+                android:gravity="center"
+                android:text="@string/txt_paragraph"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                />
+
+            <Button
+
+                android:id="@+id/mBtn_choice"
+                android:layout_width="160dp"
+                android:layout_height="160dp"
+                android:layout_marginLeft="10dp"
+                android:gravity="center"
+                android:text="@string/txt_en_choc_score"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            >
+
+            <Button
+                android:id="@+id/mBtn_Scne"
+                android:layout_width="160dp"
+                android:layout_height="160dp"
+                android:gravity="center"
+                android:text="@string/txt_en_scne_exam"
+                android:textAllCaps="false"
+                android:textColor="@color/white"/>
+
+            <Button
+                android:id="@+id/mBtn_Prtl"
+                android:layout_width="160dp"
+                android:layout_height="160dp"
+                android:layout_marginLeft="10dp"
+                android:gravity="center"
+                android:text="@string/txt_en_prtl_exam"
+                android:textAllCaps="false"
+                android:textColor="@color/white"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            >
+            <Button
+                android:id="@+id/mBtn_ASR"
+                android:layout_width="160dp"
+                android:layout_height="160dp"
+                android:gravity="center"
+                android:text="@string/txt_en_asr_rec"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                />
+
+            <Button
+                android:id="@+id/mBtn_ExternalRecorder"
+                android:layout_width="160dp"
+                android:layout_height="160dp"
+                android:layout_marginLeft="10dp"
+                android:gravity="center"
+                android:text="External Recorder"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>
