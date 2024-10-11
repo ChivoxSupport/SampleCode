@@ -20,6 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSString *)version;
 - (NSString *)commonSdkVersion;
 - (NSString *)commonSdkModules;
+- (uint32_t)commonSdkVersionNumber;
 @end
 
 NS_ASSUME_NONNULL_END

@@ -367,8 +367,9 @@
             // depends on the vad_status, execute the service logic
             if ([vad_status intValue] ==2)
             {
-                [self.engineC stop];
                 dispatch_async(dispatch_get_main_queue(), ^{
+				
+				    [self.engineC stop];
                     self.resultTextView.text = [@"\n" stringByAppendingString:result.text];
                     [self.recordButton setTitle:@"record" forState: UIControlStateNormal];
                     //[self.indicatorView stopAnimating];

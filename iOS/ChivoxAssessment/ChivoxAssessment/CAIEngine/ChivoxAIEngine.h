@@ -62,8 +62,6 @@ typedef void (^ChivoxAIEngineCreateFail)(ChivoxAIRetValue *err);
 + (void)create:(NSMutableDictionary *)cfg cb:(ChivoxAIEngineCreateCallback *)cb;
 - (instancetype)init NS_UNAVAILABLE; // 禁止外部调用init
 
-- (void)setWifiStatus:(NSString *)status;
-
 /**
  * 评测开始
  * @param param 评测参数
@@ -93,6 +91,7 @@ typedef void (^ChivoxAIEngineCreateFail)(ChivoxAIRetValue *err);
 /**
  * 销毁引擎
  */
+- (void)destroy;
 - (void)destory;
 
 /**
