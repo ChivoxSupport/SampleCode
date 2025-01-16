@@ -263,6 +263,7 @@ public class MainActivity extends AppCompatActivity
                     {
                         JSONObject cloud = new JSONObject();
                         cloud.put("enable", 1);
+                        cloud.put("server", "wss://cloud.chivox.com:443"); 
                         cfg.put("cloud", cloud);
                     }
                 } catch (JSONException e) {

@@ -288,8 +288,14 @@ public class ChoiceActivity extends AppCompatActivity
                                         {
                                             /* received vad_status report in json formatting */
                                             int status = json.optInt("vad_status");
+
                                             final int sound_intensity = json.optInt("sound_intensity");
-                                            if (status == 2) {
+
+                                            if ((status == 2)&&(recording == true))
+                                            {
+
+                                                recording = false;
+
                                                 runOnWorkerThread(new Runnable() {
                                                     public void run() {
                                                         RetValue retstop = aiengine.stop();

@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
 import com.chivox.aiengine4.AgnException;
 import com.chivox.aiengine4.AudioSource;
 import com.chivox.aiengine4.Engine;
@@ -168,13 +169,13 @@ public class SituationalDialogueActivity extends AppCompatActivity
                                     vad.put("speechLowSeek",20);
                                     param.put("vad", vad);
                                 }
-                                {
-                                    //Set user ID and signature information
+                                { //Set user ID
+                                    JSONObject app = new JSONObject();
+
                                     long timestamp = System.currentTimeMillis();
                                     String sig = Config.appKey+timestamp+Config.secretKey;
                                     sig = MD5.getDigest(sig);
 
-                                    JSONObject app = new JSONObject();
 
                                     app.put("applicationId", Config.appKey);
                                     app.put("sig", sig);
@@ -182,6 +183,7 @@ public class SituationalDialogueActivity extends AppCompatActivity
                                     app.put("timestamp", String.valueOf(timestamp));
                                     app.put("userId",Config.userId);
                                     param.put("app", app);
+
                                 }
                                 { //Set audio parameters
                                     JSONObject audio = new JSONObject();
@@ -250,11 +252,9 @@ public class SituationalDialogueActivity extends AppCompatActivity
                                 Log.e(TAG, "onError: "+json);
                             };
 
-
                             eval.callback.onEvalResult = (eval_, json) ->
                             {
                                     //Assessment result
-
                                     //Result processing submits to another thread, avoiding blocking or waiting.
                                     runOnWorkerThread(new Runnable() {
                                         public void run() {
@@ -301,19 +301,6 @@ public class SituationalDialogueActivity extends AppCompatActivity
 
                                         }
                                     });
-                                };
-
-                            eval.callback.onSoundIntensity = (eval_, soundIntensity) -> {
-                                Log.e(TAG, "Sound Intensity: " + soundIntensity);
-
-                                String soundIntensityResult = "onSoundIntensity:" + String.valueOf(soundIntensity);
-
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        jsonResultTextView.setText(soundIntensityResult);
-                                    }
-                                });
                             };
 
                             eval.callback.onVadStatus = (eval_, vadStatus) ->
@@ -347,6 +334,18 @@ public class SituationalDialogueActivity extends AppCompatActivity
                                 }
                             };
 
+                            eval.callback.onSoundIntensity = (eval_, soundIntensity) -> {
+                                Log.e(TAG, "Sound Intensity: " + soundIntensity);
+
+                                String soundIntensityResult = "onSoundIntensity:" + String.valueOf(soundIntensity);
+
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        jsonResultTextView.setText(soundIntensityResult);
+                                    }
+                                });
+                            };
                             try {
                                 eval.start(param);
                                 // 一段时间后调用stop
@@ -450,20 +449,23 @@ public class SituationalDialogueActivity extends AppCompatActivity
     }
 
 
-    public AudioPlayer.Listener playerListener = new AudioPlayer.Listener() {
-
+    public AudioPlayer.Listener playerListener = new AudioPlayer.Listener()
+    {
         @Override
-        public void onStart(AudioPlayer audioPlayer) {
+        public void onStart(AudioPlayer audioPlayer)
+        {
             playing = true;
         }
 
         @Override
-        public void onStop(AudioPlayer audioPlayer) {
+        public void onStop(AudioPlayer audioPlayer)
+        {
             playing = false;
         }
 
         @Override
-        public void onError(AudioPlayer audioPlayer, String s) {
+        public void onError(AudioPlayer audioPlayer, String s)
+        {
             playing = false;
         }
     };

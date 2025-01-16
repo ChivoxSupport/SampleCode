@@ -8,7 +8,7 @@ public class Config {
     public static String secretKey = "your secretKey";
 
     //User Id. It is recommended to set it to easily distinguish the assessment data of different users.
-    public static String userId="your userId";
+    public static String userId="ChivoxDemo520";
 
     //Different kernel types and corresponding text
 

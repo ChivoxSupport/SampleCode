@@ -173,7 +173,7 @@ public class WordSentPredActivity extends AppCompatActivity
                             try
                             {
                                 param.put("coreProvideType", "cloud");
-
+                                param.put("soundIntensityEnable", 0);
                                 { //Set vad function parameters, optional
                                     JSONObject vad = new JSONObject();
 
@@ -181,24 +181,21 @@ public class WordSentPredActivity extends AppCompatActivity
                                     if(coreType.equals("en.pred.score"))
                                     {
                                         vad.put("vadEnable", 0);
-                                        param.put("soundIntensityEnable", 1);
                                     }
                                     else
                                     {
                                         vad.put("vadEnable", 1);
-                                        param.put("soundIntensityEnable", 0);
                                     }
                                     vad.put("refDuration", 2);
                                     vad.put("speechLowSeek",20);
                                     param.put("vad", vad);
                                 }
-                                {
-                                    //Set user ID and signature information
+                                { //Set user ID
+                                    JSONObject app = new JSONObject();
+
                                     long timestamp = System.currentTimeMillis();
                                     String sig = Config.appKey+timestamp+Config.secretKey;
                                     sig = MD5.getDigest(sig);
-
-                                    JSONObject app = new JSONObject();
 
                                     app.put("applicationId", Config.appKey);
                                     app.put("sig", sig);
@@ -251,7 +248,7 @@ public class WordSentPredActivity extends AppCompatActivity
                             //Configure Recorder
                             Eval eval = new Eval.Builder(aiengine)
                                     .setAudioSource(AudioSource.InnerRecorder)
-                                    .setRecordDuration(5000)  //Set recording duration (Unit: milliseconds)
+                                    .setRecordDuration(25000)  //Set recording duration (Unit: milliseconds)
                                     .setRecordSave(file)
                                     .build();
 
@@ -278,184 +275,172 @@ public class WordSentPredActivity extends AppCompatActivity
                             eval.callback.onError = (eval_, json) ->
                             {
                                 Log.e(TAG, "onError: "+json);
-
-                                final JSONObject returnObj = json;
-
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        jsonResultTextView.setText(returnObj.toString());
-                                    }
-                                });
-
                             };
 
-                                //Assessment result
-                             eval.callback.onEvalResult = (eval_, json) ->
-                             {
-                                 //Assessment result
-                                 //Result processing submits to another thread, avoiding blocking or waiting.
-                                 runOnWorkerThread(new Runnable() {
-                                     public void run() {
-                                         String overallScore = null;
-                                         String fluencyScore = null;
-                                         String integrityScore = null;
-                                         String accuracyScore = null;
-                                         String standardPhone = null;
-                                         String yourPhone = null;
+                            //Assessment result
+                            eval.callback.onEvalResult = (eval_, json) ->
+                            {
+                                    //Result processing submits to another thread, avoiding blocking or waiting.
+                                    runOnWorkerThread(new Runnable()
+                                    {
+                                        public void run()
+                                        {
+                                            String overallScore = null;
+                                            String fluencyScore = null;
+                                            String integrityScore = null;
+                                            String accuracyScore = null;
+                                            String standardPhone = null;
+                                            String yourPhone = null;
 
-                                         StringBuilder result = new StringBuilder();
-                                         StringBuilder StandardPron = new StringBuilder();
-                                         StringBuilder yourPron = new StringBuilder();
-
-
-                                         try {
-                                             final JSONObject returnObj = json;
-
-                                             JSONObject resultJSONObject = null;
-                                             String audioTips = null;
-
-                                             if (returnObj.has("result")) {
-                                                 resultJSONObject = returnObj.getJSONObject("result");
-
-                                                 JSONObject infoObj = resultJSONObject.getJSONObject("info");
-                                                 if (infoObj.has("tips")) {
-                                                     result.append(infoObj.getString("tips"));
-                                                     result.append("\n Audio quality is poor or duration is too short, please record again!\n");
-                                                 }
+                                            StringBuilder result = new StringBuilder();
+                                            StringBuilder StandardPron = new StringBuilder();
+                                            StringBuilder yourPron = new StringBuilder();
 
 
-                                                 if (resultJSONObject.has("overall")) {
-                                                     overallScore = resultJSONObject.getString("overall");
-                                                     result.append("Overall score: " + overallScore);
-                                                 }
+                                            try
+                                            {
+                                                final JSONObject returnObj = json;
 
-                                                 //Different kernels return different dimensions and need to be processed separately
-                                                 if (coreType.equals("en.word.pron")) {
-                                                     standardPhone = resultJSONObject.getJSONObject("details").getJSONArray("word").getJSONObject(0).getString("lab");
+                                                JSONObject resultJSONObject = null;
+                                                String audioTips = null;
 
-                                                     String accentStr = resultJSONObject.getJSONObject("details").getJSONArray("word").getJSONObject(0).getString("accent");
-                                                     int accent = Integer.parseInt(accentStr);
+                                                if (returnObj.has("result"))
+                                                {
+                                                    resultJSONObject = returnObj.getJSONObject("result");
 
-                                                     String labArr[] = standardPhone.split(" ");
-
-
-                                                     for (int i = 0; i < labArr.length; i++) {
-                                                         StandardPron.append(phonemap.getMark(labArr[i], accent));
-                                                     }
+                                                    JSONObject infoObj = resultJSONObject.getJSONObject("info");
+                                                    if (infoObj.has("tips")) {
+                                                        result.append(infoObj.getString("tips"));
+                                                        result.append("\n Audio quality is poor or duration is too short, please record again!\n");
+                                                    }
 
 
-                                                     yourPhone = resultJSONObject.getJSONObject("details").getJSONArray("word").getJSONObject(0).getString("rec");
+                                                    if (resultJSONObject.has("overall")) {
+                                                        overallScore = resultJSONObject.getString("overall");
+                                                        result.append("Overall score: " + overallScore);
+                                                    }
 
-                                                     String recArr[] = yourPhone.split(" ");
+                                                    //Different kernels return different dimensions and need to be processed separately
+                                                    if (coreType.equals("en.word.pron"))
+                                                    {
+                                                        standardPhone = resultJSONObject.getJSONObject("details").getJSONArray("word").getJSONObject(0).getString("lab");
 
-                                                     for (int i = 0; i < recArr.length; i++) {
-                                                         yourPron.append(phonemap.getMark(recArr[i], accent));
-                                                     }
+                                                        String accentStr = resultJSONObject.getJSONObject("details").getJSONArray("word").getJSONObject(0).getString("accent");
+                                                        int accent = Integer.parseInt(accentStr);
 
-                                                     result.append("\nstandard pronuciation: " + StandardPron.toString());
-                                                     result.append("\nyour     pronuciation: " + yourPron.toString());
-
-                                                 } else if (coreType.equals("en.sent.pron")) {
-                                                     fluencyScore = resultJSONObject.getJSONObject("fluency").getString("overall");
-                                                     integrityScore = resultJSONObject.getString("integrity");
-                                                     accuracyScore = resultJSONObject.getString("accuracy");
-
-                                                     result.append("\n fluency score: " + fluencyScore);
-                                                     result.append("\n integrity score: " + integrityScore);
-                                                     result.append("\n accuracy score: " + accuracyScore);
-                                                     result.append("\n\n");
-
-                                                     JSONArray jsonArray = resultJSONObject.getJSONArray("details");
-
-                                                     String wordLab;
-                                                     StringBuilder SuperfluousReadingWords = new StringBuilder();
-                                                     StringBuilder MissingReadingWords = new StringBuilder();
-                                                     StringBuilder MisreadWords = new StringBuilder();
-
-                                                     String errorType;
-                                                     String wordRec;
-
-                                                     for (int i = 0; i < jsonArray.length(); i++) {
-                                                         JSONObject jsonObject = jsonArray.getJSONObject(i);
-                                                         wordLab = jsonObject.optString("lab", null);
-                                                         wordRec = jsonObject.optString("rec", null);
-                                                         errorType = jsonObject.optString("is_err", null);
-
-                                                         if (errorType.equals("1")) {
-                                                             if (!(wordRec.equals("UNK"))) {
-                                                                 SuperfluousReadingWords.append(wordRec + " ");
-                                                             }
-                                                         } else if (errorType.equals("2")) {
-                                                             MissingReadingWords.append(wordLab + " ");
-                                                         } else if (errorType.equals("3")) {
-                                                             MisreadWords.append(wordLab + " ");
-                                                         }
-                                                     }
-
-                                                     result.append("\n Superfluous Reading:" + SuperfluousReadingWords.toString());
-                                                     result.append("\n Missing Reading:" + MissingReadingWords.toString());
-                                                     result.append("\n Misread:" + MisreadWords.toString());
+                                                        String labArr[] = standardPhone.split(" ");
 
 
-                                                 } else if (coreType.equals("en.pred.score")) {
-                                                     fluencyScore = resultJSONObject.getJSONObject("fluency").getString("overall");
-                                                     integrityScore = resultJSONObject.getString("integrity");
-                                                     accuracyScore = resultJSONObject.getString("accuracy");
+                                                        for (int i = 0; i < labArr.length; i++) {
+                                                            StandardPron.append(phonemap.getMark(labArr[i],accent));
+                                                        }
 
-                                                     result.append("\n fluency score: " + fluencyScore);
-                                                     result.append("\n integrity score: " + integrityScore);
-                                                     result.append("\n accuracy score: " + accuracyScore);
 
-                                                 }
+                                                        yourPhone = resultJSONObject.getJSONObject("details").getJSONArray("word").getJSONObject(0).getString("rec");
 
-                                             } else {
-                                                 //Process kernel error
-                                                 if (returnObj.has("error")) {
-                                                     JSONObject errorObj = returnObj.getJSONObject("error");
-                                                     String errorStr = errorObj.getString("id");
+                                                        String recArr[] = yourPhone.split(" ");
 
-                                                     if (errorStr.equals("51000")) {
-                                                         result.append("51000 error, request parameters or text format is abnormal.\n");
-                                                     }
-                                                     result.append("errId:" + errorObj.getString("id"));
-                                                     result.append("errInfo:" + errorObj.getString("msg"));
-                                                 }
+                                                        for (int i = 0; i < recArr.length; i++) {
+                                                            yourPron.append(phonemap.getMark(recArr[i],accent));
+                                                        }
 
-                                                 //Process sdk/server error
-                                                 if (returnObj.has("errId")) {
-                                                     result.append("errId:" + returnObj.getString("errId"));
-                                                     result.append("errInfo:" + returnObj.getString("error"));
-                                                 }
-                                             }
+                                                        result.append("\nstandard pronuciation: " + StandardPron.toString());
+                                                        result.append("\nyour     pronuciation: " + yourPron.toString());
 
-                                         } catch (Exception e) {
-                                             Log.e(TAG, "onEvalResult , json process error!");
-                                             e.printStackTrace();
-                                         }
+                                                    } else if (coreType.equals("en.sent.pron")) {
+                                                        fluencyScore = resultJSONObject.getJSONObject("fluency").getString("overall");
+                                                        integrityScore = resultJSONObject.getString("integrity");
+                                                        accuracyScore = resultJSONObject.getString("accuracy");
 
-                                         runOnUiThread(new Runnable() {
-                                             @Override
-                                             public void run() {
-                                                 jsonResultTextView.setText(result.toString());
-                                             }
-                                         });
+                                                        result.append("\n fluency score: " + fluencyScore);
+                                                        result.append("\n integrity score: " + integrityScore);
+                                                        result.append("\n accuracy score: " + accuracyScore);
+                                                        result.append("\n\n");
 
-                                     }
-                                 });
-                             };
+                                                        JSONArray jsonArray = resultJSONObject.getJSONArray("details");
 
-                            eval.callback.onSoundIntensity = (eval_, soundIntensity) -> {
-                                Log.e(TAG, "Sound Intensity: " + soundIntensity);
+                                                        String wordLab;
+                                                        StringBuilder SuperfluousReadingWords = new StringBuilder();
+                                                        StringBuilder MissingReadingWords = new StringBuilder();
+                                                        StringBuilder MisreadWords = new StringBuilder();
 
-                                String soundIntensityResult = "onSoundIntensity:" + String.valueOf(soundIntensity);
+                                                        String errorType;
+                                                        String wordRec;
 
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        jsonResultTextView.setText(soundIntensityResult);
-                                    }
-                                });
+                                                        for (int i = 0; i < jsonArray.length(); i++) {
+                                                            JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                                            wordLab = jsonObject.optString("lab", null);
+                                                            wordRec = jsonObject.optString("rec",null);
+                                                            errorType = jsonObject.optString("is_err", null);
+
+                                                            if( errorType.equals("1"))
+                                                            {
+                                                                if(!(wordRec.equals("UNK")))
+                                                                {
+                                                                    SuperfluousReadingWords.append(wordRec + " ");
+                                                                }
+                                                            }
+                                                            else if(errorType.equals("2"))
+                                                            {
+                                                                MissingReadingWords.append(wordLab + " ");
+                                                            }
+                                                            else if(errorType.equals("3"))
+                                                            {
+                                                                MisreadWords.append(wordLab + " ");
+                                                            }
+                                                        }
+
+                                                        result.append("\n Superfluous Reading:" + SuperfluousReadingWords.toString());
+                                                        result.append("\n Missing Reading:" + MissingReadingWords.toString());
+                                                        result.append("\n Misread:" + MisreadWords.toString());
+
+
+                                                    } else if (coreType.equals("en.pred.score")) {
+                                                        fluencyScore = resultJSONObject.getJSONObject("fluency").getString("overall");
+                                                        integrityScore = resultJSONObject.getString("integrity");
+                                                        accuracyScore = resultJSONObject.getString("accuracy");
+
+                                                        result.append("\n fluency score: " + fluencyScore);
+                                                        result.append("\n integrity score: " + integrityScore);
+                                                        result.append("\n accuracy score: " + accuracyScore);
+
+                                                    }
+
+                                                } else {
+                                                    //Process kernel error
+                                                    if (returnObj.has("error")) {
+                                                        JSONObject errorObj = returnObj.getJSONObject("error");
+                                                        String errorStr = errorObj.getString("id");
+
+                                                        if (errorStr.equals("51000")) {
+                                                            result.append("51000 error, request parameters or text format is abnormal.\n");
+                                                        }
+                                                        result.append("errId:" + errorObj.getString("id"));
+                                                        result.append("errInfo:" + errorObj.getString("msg"));
+                                                    }
+
+                                                    //Process sdk/server error
+                                                    if (returnObj.has("errId")) {
+                                                        result.append("errId:" + returnObj.getString("errId"));
+                                                        result.append("errInfo:" + returnObj.getString("error"));
+                                                    }
+                                                }
+
+                                            } catch (Exception e)
+                                            {
+                                                Log.e(TAG, "onEvalResult , json process error!");
+                                                e.printStackTrace();
+                                            }
+
+                                            runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    jsonResultTextView.setText(result.toString());
+                                                }
+                                            });
+
+                                        }
+                                    });
                             };
 
                             eval.callback.onVadStatus = (eval_, vadStatus) ->
@@ -471,7 +456,12 @@ public class WordSentPredActivity extends AppCompatActivity
                                     }
                                 });
 
-                                if (vadStatus == 2) {
+
+                                if ((vadStatus == 2)&&(recording == true))
+                                {
+
+                                    recording = false;
+
                                     runOnWorkerThread(new Runnable() {
                                         public void run() {
                                             try {
@@ -491,6 +481,19 @@ public class WordSentPredActivity extends AppCompatActivity
                                 }
                             };
 
+                            eval.callback.onSoundIntensity = (eval_, soundIntensity) -> {
+                                Log.e(TAG, "Sound Intensity: " + soundIntensity);
+
+                                String soundIntensityResult = "onSoundIntensity:" + String.valueOf(soundIntensity);
+
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        jsonResultTextView.setText(soundIntensityResult);
+                                    }
+                                });
+                            };
+
                             try {
                                 eval.start(param);
                                 recording = true;
@@ -499,7 +502,6 @@ public class WordSentPredActivity extends AppCompatActivity
                             } catch (AgnException e) {
                                 eval.cancel();
                             }
-
                         }
                     });
                 } else
@@ -578,26 +580,26 @@ public class WordSentPredActivity extends AppCompatActivity
 
     }
 
-        public AudioPlayer.Listener playerListener = new AudioPlayer.Listener()
+    public AudioPlayer.Listener playerListener = new AudioPlayer.Listener()
+    {
+        @Override
+        public void onStart(AudioPlayer audioPlayer)
         {
-            @Override
-            public void onStart(AudioPlayer audioPlayer)
-            {
-                playing = true;
-            }
+            playing = true;
+        }
 
-            @Override
-            public void onStop(AudioPlayer audioPlayer)
-            {
-                playing = false;
-            }
+        @Override
+        public void onStop(AudioPlayer audioPlayer)
+        {
+            playing = false;
+        }
 
-            @Override
-            public void onError(AudioPlayer audioPlayer, String s)
-            {
-                playing = false;
-            }
-        };
+        @Override
+        public void onError(AudioPlayer audioPlayer, String s)
+        {
+            playing = false;
+        }
+    };
 
     private String getDiscription( String errorType )
     {

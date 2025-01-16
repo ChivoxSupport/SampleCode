@@ -1,6 +1,5 @@
 package com.example.chivoxonline;
 import android.app.Application;
-
 import com.chivox.aiengine4.Engine;
 
 public class MyApplication extends Application {

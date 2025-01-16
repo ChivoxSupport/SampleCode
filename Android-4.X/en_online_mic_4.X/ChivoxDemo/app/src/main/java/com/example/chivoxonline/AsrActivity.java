@@ -110,7 +110,7 @@ public class AsrActivity extends AppCompatActivity
     {
         if(recording)
         {
-            RecorderInstance.cancel();
+            aiengine.close();
         }
         if (playing)
         {
@@ -162,13 +162,13 @@ public class AsrActivity extends AppCompatActivity
                                     vad.put("speechLowSeek",40);
                                     param.put("vad", vad);
                                 }
-                                {
-                                    //Set user ID and signature information
+                                { //Set user ID
+                                    JSONObject app = new JSONObject();
+
                                     long timestamp = System.currentTimeMillis();
                                     String sig = Config.appKey+timestamp+Config.secretKey;
                                     sig = MD5.getDigest(sig);
 
-                                    JSONObject app = new JSONObject();
 
                                     app.put("applicationId", Config.appKey);
                                     app.put("sig", sig);
@@ -213,7 +213,7 @@ public class AsrActivity extends AppCompatActivity
                             Log.e(TAG, "file path11: " + file);
 
 
-
+                            //Configure Recorder
                             Eval eval = new Eval.Builder(aiengine)
                                     .setAudioSource(AudioSource.InnerRecorder)
                                     .setRecordDuration(25000)  //Set recording duration (Unit: milliseconds)
@@ -239,92 +239,104 @@ public class AsrActivity extends AppCompatActivity
                                 Log.e(TAG, "recorder error: " +info);
                             };
 
+
                             eval.callback.onError = (eval_, json) ->
                             {
                                 Log.e(TAG, "onError: "+json);
                             };
 
+                            //Assessment result
                             eval.callback.onEvalResult = (eval_, json) ->
                             {
-                                Log.e(TAG, "EvalResult:111"+json);
+                                    //Assessment result
+                                    //Result processing submits to another thread, avoiding blocking or waiting.
+                                    runOnWorkerThread(new Runnable() {
+                                        public void run() {
 
+                                            StringBuilder recResult = new StringBuilder();
+                                            StringBuilder ScoreResult = new StringBuilder();
 
-                                //Result processing submits to another thread, avoiding blocking or waiting.
-                                runOnWorkerThread(new Runnable()
-                                {
-                                    public void run()
-                                    {
+                                            try {
+                                                JSONObject returnObj = json;
 
-                                        StringBuilder recResult = new StringBuilder();
-                                        StringBuilder ScoreResult = new StringBuilder();
+                                                int isEnd = returnObj.optInt("eof", 0);
 
-                                        try {
-                                            JSONObject returnObj = json;
+                                                JSONObject resultJSONObject = returnObj.getJSONObject("result");
+                                                JSONArray jsonArray = resultJSONObject.getJSONArray("align");
 
-                                            int isEnd = returnObj.optInt("eof", 0);
+                                                String word = null;
+                                                String punctuation = null;
 
-                                            JSONObject resultJSONObject = returnObj.getJSONObject("result");
-                                            JSONArray jsonArray = resultJSONObject.getJSONArray("align");
+                                                //Extract the recognized text
+                                                recResult.append("Recognition result:\n");
+                                                for (int i = 0; i < jsonArray.length(); i++) {
+                                                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                                    word = jsonObject.optString("txt", null);
+                                                    punctuation = jsonObject.optString("sep", null);
 
-                                            String word = null;
-                                            String punctuation = null;
+                                                    recResult.append(word);
+                                                    recResult.append(punctuation);
+                                                    recResult.append(" ");
+                                                }
 
-                                            //Extract the recognized text
-                                            recResult.append("Recognition result:\n");
-                                            for (int i = 0; i < jsonArray.length(); i++) {
-                                                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                                                word = jsonObject.optString("txt", null);
-                                                punctuation = jsonObject.optString("sep", null);
+                                                //Extract score results
+                                                if (1 == isEnd) {
+                                                    ScoreResult.append("Assessment result:\n");
+                                                    if (resultJSONObject.has("rec")) {
+                                                        ScoreResult.append("\nOverall score: " + resultJSONObject.getString("overall"));
+                                                    }
+                                                    if (resultJSONObject.has("fluency")) {
+                                                        JSONObject fluencyJSONObject = resultJSONObject.getJSONObject("fluency");
+                                                        ScoreResult.append("\nFluency score: " + fluencyJSONObject.getString("overall"));
+                                                        ScoreResult.append("\nWPM: " + fluencyJSONObject.getString("speed"));
+                                                        ScoreResult.append("\nPause times: " + fluencyJSONObject.getString("pause"));
+                                                    }
+                                                    if (resultJSONObject.has("pron")) {
+                                                        ScoreResult.append("\nPronuciation score: " + resultJSONObject.getString("pron"));
+                                                    }
+                                                }
 
-                                                recResult.append(word);
-                                                recResult.append(punctuation);
-                                                recResult.append(" ");
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
                                             }
 
-                                            //Extract score results
-                                            if (1 == isEnd) {
-                                                ScoreResult.append("Assessment result:\n");
-                                                if (resultJSONObject.has("rec")) {
-                                                    ScoreResult.append("\nOverall score: " + resultJSONObject.getString("overall"));
+                                            //Update main thread UI
+                                            runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    ScoreResultTextView.setText(ScoreResult.toString());
+                                                    RecResultTextView.setText(recResult.toString());
                                                 }
-                                                if (resultJSONObject.has("fluency")) {
-                                                    JSONObject fluencyJSONObject = resultJSONObject.getJSONObject("fluency");
-                                                    ScoreResult.append("\nFluency score: " + fluencyJSONObject.getString("overall"));
-                                                    ScoreResult.append("\nWPM: " + fluencyJSONObject.getString("speed"));
-                                                    ScoreResult.append("\nPause times: " + fluencyJSONObject.getString("pause"));
-                                                }
-                                                if (resultJSONObject.has("pron")) {
-                                                    ScoreResult.append("\nPronuciation score: " + resultJSONObject.getString("pron"));
-                                                }
-                                            }
+                                            });
 
-                                        } catch (Exception e) {
-                                            e.printStackTrace();
                                         }
-
-                                        //Update main thread UI
-                                        runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                ScoreResultTextView.setText(ScoreResult.toString());
-                                                RecResultTextView.setText(recResult.toString());
-                                            }
-                                        });
-
-                                    }
-
-                                });
-
+                                    });
 
                             };
-                            eval.callback.onVadStatus = (eval_, vadStatus) ->
-                            {
-                                Log.e(TAG, "onVadStatus: " + vadStatus);
+
+                            eval.callback.onSoundIntensity = (eval_, soundIntensity) -> {
+                                Log.e(TAG, "Sound Intensity: " + soundIntensity);
+
+                                String soundIntensityResult = "onSoundIntensity:" + String.valueOf(soundIntensity);
 
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        RecResultTextView.setText(vadStatus);
+                                        RecResultTextView.setText(soundIntensityResult);
+                                    }
+                                });
+                            };
+
+                            eval.callback.onVadStatus = (eval_, vadStatus) ->
+                            {
+                                Log.e(TAG, "onVadStatus: " + vadStatus);
+
+                                String vadResult = "vad Status:" + String.valueOf(vadStatus);
+
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        RecResultTextView.setText(vadResult);
                                     }
                                 });
 
@@ -347,15 +359,14 @@ public class AsrActivity extends AppCompatActivity
                                     });
                                 }
                             };
-                            eval.callback.onSoundIntensity = (eval_, soundIntensity) -> {};
 
                             try {
-                                eval.start(param);
-                                // 一段时间后调用stop
-                                //
-                            } catch (AgnException e) {
-                                eval.cancel();
-                            }
+                            eval.start(param);
+                            // 一段时间后调用stop
+                            //
+                           } catch (AgnException e) {
+                              eval.cancel();
+                           }
 
                         }
                     });
@@ -366,12 +377,13 @@ public class AsrActivity extends AppCompatActivity
                             public void run() {
                                 try {
                                     RecorderInstance.stop();
-                                } catch (AgnException e) {
+                                } catch (AgnException e)
+                                {
                                     e.printStackTrace();
                                 }
-                                ;
                                 recording = false;
-                            }
+
+                                }
                         });
                     }
                 }

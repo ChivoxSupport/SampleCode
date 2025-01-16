@@ -16,6 +16,7 @@ import com.chivox.aiengine4.AgnException;
 import com.chivox.aiengine4.AudioSource;
 import com.chivox.aiengine4.Engine;
 import com.chivox.aiengine4.Eval;
+import com.chivox.aiengine4.media.AudioPlayer;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -36,7 +37,6 @@ public class OuterFeedActivity extends AppCompatActivity
     private Engine aiengine = null;
 
     private Eval RecorderInstance;
-
 
     private String AudioName = "I-know-the-place-very-well.wav";
 
@@ -154,13 +154,13 @@ public class OuterFeedActivity extends AppCompatActivity
                                 vad.put("speechLowSeek",40);
                                 param.put("vad", vad);
                             }
-                            {
-                                //Set user ID and signature information
+                            { //Set user ID
+                                JSONObject app = new JSONObject();
+
                                 long timestamp = System.currentTimeMillis();
                                 String sig = Config.appKey+timestamp+Config.secretKey;
                                 sig = MD5.getDigest(sig);
 
-                                JSONObject app = new JSONObject();
 
                                 app.put("applicationId", Config.appKey);
                                 app.put("sig", sig);
@@ -203,8 +203,6 @@ public class OuterFeedActivity extends AppCompatActivity
 
                         RecorderInstance = eval;
 
-
-
                         eval.callback.onError = (eval_, json) ->
                         {
                             Log.e(TAG, "onError: "+json);
@@ -212,91 +210,101 @@ public class OuterFeedActivity extends AppCompatActivity
 
                         eval.callback.onEvalResult = (eval_, json) ->
                         {
-                                //Assessment result
-                                //Result processing submits to another thread, avoiding blocking or waiting.
-                                runOnWorkerThread(new Runnable() {
-                                    public void run() {
-                                        String overallScore = null;
-                                        String fluencyScore = null;
-                                        String integrityScore = null;
-                                        String accuracyScore = null;
+                            //Result processing submits to another thread, avoiding blocking or waiting.
+                            runOnWorkerThread(new Runnable() {
+                                public void run() {
+                                    String overallScore = null;
+                                    String fluencyScore = null;
+                                    String integrityScore = null;
+                                    String accuracyScore = null;
 
-                                        StringBuilder ScoreResult = new StringBuilder();
+                                    StringBuilder ScoreResult = new StringBuilder();
 
-                                        try {
-                                            final JSONObject returnObj = json;
+                                    try {
+                                        final JSONObject returnObj = json;
 
-                                            JSONObject resultJSONObject = null;
-                                            String audioTips = null;
+                                        JSONObject resultJSONObject = null;
+                                        String audioTips = null;
 
-                                            if (returnObj.has("result")) {
-                                                ScoreResult.append("Assessment result:\n");
+                                        if (returnObj.has("result")) {
+                                            ScoreResult.append("Assessment result:\n");
 
-                                                resultJSONObject = returnObj.getJSONObject("result");
+                                            resultJSONObject = returnObj.getJSONObject("result");
 
-                                                overallScore = resultJSONObject.getString("overall");
-                                                ScoreResult.append(" Overall score: " + overallScore);
+                                            overallScore = resultJSONObject.getString("overall");
+                                            ScoreResult.append(" Overall score: " + overallScore);
 
-                                                fluencyScore = resultJSONObject.getJSONObject("fluency").getString("overall");
-                                                integrityScore = resultJSONObject.getString("integrity");
-                                                accuracyScore = resultJSONObject.getString("accuracy");
+                                            fluencyScore = resultJSONObject.getJSONObject("fluency").getString("overall");
+                                            integrityScore = resultJSONObject.getString("integrity");
+                                            accuracyScore = resultJSONObject.getString("accuracy");
 
-                                                ScoreResult.append("\n Fluency score: " + fluencyScore);
-                                                ScoreResult.append("\n Integrity score: " + integrityScore);
-                                                ScoreResult.append("\n Accuracy score: " + accuracyScore);
-                                                ScoreResult.append("\n\n");
+                                            ScoreResult.append("\n Fluency score: " + fluencyScore);
+                                            ScoreResult.append("\n Integrity score: " + integrityScore);
+                                            ScoreResult.append("\n Accuracy score: " + accuracyScore);
+                                            ScoreResult.append("\n\n");
 
-                                            }
-
-                                        } catch (Exception e) {
-                                            e.printStackTrace();
                                         }
 
-                                        //Update main thread UI
-                                        runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                jsonResultTextView.setText(ScoreResult.toString());
-                                                AssessmentButton.setClickable(true);
-                                            }
-                                        });
-
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
                                     }
-                                });
-                            };
+
+                                    //Update main thread UI
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            jsonResultTextView.setText(ScoreResult.toString());
+                                            AssessmentButton.setClickable(true);
+                                        }
+                                    });
+
+                                }
+                            });
+                        };
 
                         eval.callback.onVadStatus = (eval_, vadStatus) ->
                         {
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        jsonResultTextView.setText(vadStatus);
-                                    }
-                                });
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    jsonResultTextView.setText(vadStatus);
+                                }
+                            });
 
                             if (vadStatus == 2)
                             {
-                                    runOnWorkerThread(new Runnable() {
-                                        public void run() {
-                                            try {
-                                                RecorderInstance.stop();
-                                            } catch (AgnException e) {
-                                                e.printStackTrace();
-                                            }
-                                            runOnUiThread(new Runnable() {
-                                                public void run() {
-                                                    if (AssessmentButton.getText().equals(getText(R.string.stop))) {
-                                                        AssessmentButton.setText(R.string.record);
-                                                    }
-                                                }
-                                            });
+                                runOnWorkerThread(new Runnable() {
+                                    public void run() {
+                                        try {
+                                            RecorderInstance.stop();
+                                        } catch (AgnException e) {
+                                            e.printStackTrace();
                                         }
-                                    });
+                                        runOnUiThread(new Runnable() {
+                                            public void run() {
+                                                if (AssessmentButton.getText().equals(getText(R.string.stop))) {
+                                                    AssessmentButton.setText(R.string.record);
+                                                }
+                                            }
+                                        });
+                                    }
+                                });
                             }
 
                         };
 
+                        eval.callback.onSoundIntensity = (eval_, soundIntensity) -> {
+                            Log.e(TAG, "Sound Intensity: " + soundIntensity);
 
+                            String soundIntensityResult = "onSoundIntensity:" + String.valueOf(soundIntensity);
+
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    jsonResultTextView.setText(soundIntensityResult);
+                                }
+                            });
+                        };
 
 
                         try {
@@ -307,8 +315,8 @@ public class OuterFeedActivity extends AppCompatActivity
                             eval.cancel();
                         }
 
-                        //Read the audio file (receive the real-time audio stream of the external recorder), 
-						//call the feed interface to send the audio, it may be called many times
+                        //Read the audio file (receive the real-time audio stream of the external recorder),
+                        //call the feed interface to send the audio, it may be called many times
                         InputStream fis = null;
                         try {
                             fis = getApplicationContext().getAssets().open(AudioName);
@@ -322,21 +330,12 @@ public class OuterFeedActivity extends AppCompatActivity
                         } catch (IOException e1) {
                             e1.printStackTrace();
                         }
-
-
-                        try
-                        {
-                            while (-1 != (bytes = fis.read(buf, 0, 1024)))
-                            {
-                                System.out.println("buf"+ buf.length);
+                        try {
+                            while (-1 != (bytes = fis.read(buf, 0, 1024))) {
                                 eval.feed(buf, bytes);
-                                System.out.println("length: " + bytes);
                             }
-
                             System.out.println("end read file(feed)");
-
-                        }
-                        catch (IOException | AgnException e) {
+                        } catch (IOException | AgnException e) {
                             e.printStackTrace();
                         }
 
@@ -352,12 +351,10 @@ public class OuterFeedActivity extends AppCompatActivity
                             e.printStackTrace();
                         }
 
-
                     }
                 });
             }
         });
 
     }
-
 }

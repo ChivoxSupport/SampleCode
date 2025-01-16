@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.chivox.aiengine4.Engine;
+import com.chivox.aiengine4.Eval;
 import com.chivox.aiengine4.Version;
 
 import org.json.JSONException;
@@ -36,6 +37,8 @@ public class MainActivity extends AppCompatActivity
 
     private Engine aiengine = null;
 
+    private Eval RecorderInstance;
+
     private Button btnWord;
     private Button btnSent;
     private Button btnPred;
@@ -45,7 +48,6 @@ public class MainActivity extends AppCompatActivity
     private Button btnASR;
 
     private Button btnExternalRecorder;
-
     private static String[] PERMISSION_AUDIO = {
             Manifest.permission.RECORD_AUDIO
     };
@@ -67,8 +69,7 @@ public class MainActivity extends AppCompatActivity
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -218,16 +219,9 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    private void initEngine()
-    {
+    private void initEngine() {
         runOnWorkerThread(new Runnable() {
             public void run() {
-
-                //获取sdk版本号
-                String sdkVersion = Version.DOT_STRING;
-
-                Log.d(TAG, "sdkVersion:" + sdkVersion);
-
                 JSONObject cfg = new JSONObject();
                 try {
                     //vad source path
@@ -240,8 +234,9 @@ public class MainActivity extends AppCompatActivity
                     //Local log path
                     String LogPath = AIEngineHelper.getFilesDir(getApplicationContext()).getPath() + "/Log.txt";
 
-                    //Configure the appKey and provision authorized by Chivox
+                    //Configure the appKey, secretKey, and provision authorized by Chivox
                     cfg.put("appKey", Config.appKey);
+                    cfg.put("secretKey", Config.secretKey);
                     cfg.put("provision", provisionPath);
 
                     //Configure the vad function module, optional
@@ -260,6 +255,10 @@ public class MainActivity extends AppCompatActivity
                         cfg.put("prof", prof);
                     }
 
+                    //Get sdk version
+                    String sdkVersion = Version.DOT_STRING;
+
+                    Log.d(TAG, "sdkVersion:" + sdkVersion);
 
                     //Use online assessments
                     {
@@ -273,11 +272,11 @@ public class MainActivity extends AppCompatActivity
                     return;
                 }
 
+
+                //Create an engine. This call will not block the UI thread. After the creation is successful, it will be called back through Engine.CreateCallback
                 Engine.create(cfg, (e, engine) -> {
-                    // 创建引擎回调
                     if (e != null) {
-                        // 发生异常
-                        //Creation failed, please check e.errId and e.error to analyze the reason.
+                        //Created successfully, save the engine instance for subsequent use
                         Log.e("TAG", "create aiengine fail, error code "+ e.getCode()+"error message" + e.getMessage());
 
                         runOnUiThread(new Runnable() {
@@ -287,11 +286,12 @@ public class MainActivity extends AppCompatActivity
                                 Toast.makeText(MainActivity.this, "create aiengine fail", Toast.LENGTH_SHORT).show();
                             }
                         });
-
                         return;
+
                     }
-                    else {
-                        aiengine = engine;  //保存引擎实例
+                    else
+                    {
+                        aiengine = engine;
 
                         //Set the engine instance as a global variable, facilitate subsequent reuse
                         app = (MyApplication) getApplication();
@@ -311,6 +311,8 @@ public class MainActivity extends AppCompatActivity
                         });
                     }
                 });
+
+
             }
         });
     }

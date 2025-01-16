@@ -16,7 +16,6 @@ import com.chivox.aiengine4.AudioSource;
 import com.chivox.aiengine4.Engine;
 import com.chivox.aiengine4.Eval;
 import com.chivox.aiengine4.media.AudioPlayer;
-
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -152,8 +151,7 @@ public class DescribeThePictureActivity extends AppCompatActivity
                     jsonResultTextView.setText("");
 
                     runOnWorkerThread(new Runnable() {
-                        public void run()
-                        {
+                        public void run() {
 
                             Log.e(TAG, "click record buttosn");
 
@@ -169,13 +167,13 @@ public class DescribeThePictureActivity extends AppCompatActivity
                                     vad.put("speechLowSeek",30);
                                     param.put("vad", vad);
                                 }
-                                {
-                                    //Set user ID and signature information
+                                { //Set user ID
+                                    JSONObject app = new JSONObject();
+
                                     long timestamp = System.currentTimeMillis();
                                     String sig = Config.appKey+timestamp+Config.secretKey;
                                     sig = MD5.getDigest(sig);
 
-                                    JSONObject app = new JSONObject();
 
                                     app.put("applicationId", Config.appKey);
                                     app.put("sig", sig);
@@ -220,6 +218,8 @@ public class DescribeThePictureActivity extends AppCompatActivity
                             File file = new File(AIEngineHelper.getAviFile(context));
                             Log.e(TAG, "file path11: " + file);
 
+
+                            //Configure Recorder
                             Eval eval = new Eval.Builder(aiengine)
                                     .setAudioSource(AudioSource.InnerRecorder)
                                     .setRecordDuration(25000)  //Set recording duration (Unit: milliseconds)
@@ -227,7 +227,6 @@ public class DescribeThePictureActivity extends AppCompatActivity
                                     .build();
 
                             RecorderInstance = eval;
-
 
                             eval.callback.onRecorderStart = (eval_) -> {
                                 Log.e(TAG, "start recording");
@@ -246,31 +245,20 @@ public class DescribeThePictureActivity extends AppCompatActivity
                                 Log.e(TAG, "recorder error: " +info);
                             };
 
+
                             eval.callback.onError = (eval_, json) ->
                             {
                                 Log.e(TAG, "onError: "+json);
                             };
 
-                            eval.callback.onSoundIntensity = (eval_, soundIntensity) -> {
-                                Log.e(TAG, "Sound Intensity: " + soundIntensity);
-
-                                String soundIntensityResult = "onSoundIntensity:" + String.valueOf(soundIntensity);
-
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        jsonResultTextView.setText(soundIntensityResult);
-                                    }
-                                });
-                            };
-
+                            //Assessment result
                             eval.callback.onEvalResult = (eval_, json) ->
-                                {
+                            {
+                                    //Assessment result
 
                                     //Result processing submits to another thread, avoiding blocking or waiting.
                                     runOnWorkerThread(new Runnable() {
                                         public void run() {
-
 
                                             String overallScore = null;
                                             String grammarScore = null;
@@ -313,16 +301,18 @@ public class DescribeThePictureActivity extends AppCompatActivity
                                             });
                                         }
                                     });
-                                };
+                            };
 
                             eval.callback.onVadStatus = (eval_, vadStatus) ->
                             {
                                 Log.e(TAG, "onVadStatus: " + vadStatus);
 
+                                String vadResult = "vad Status:" + String.valueOf(vadStatus);
+
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        jsonResultTextView.setText(vadStatus);
+                                        jsonResultTextView.setText(vadResult);
                                     }
                                 });
 
@@ -346,11 +336,21 @@ public class DescribeThePictureActivity extends AppCompatActivity
                                 }
                             };
 
+                            eval.callback.onSoundIntensity = (eval_, soundIntensity) -> {
+                                Log.e(TAG, "Sound Intensity: " + soundIntensity);
+
+                                String soundIntensityResult = "onSoundIntensity:" + String.valueOf(soundIntensity);
+
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        jsonResultTextView.setText(soundIntensityResult);
+                                    }
+                                });
+                            };
 
                             try {
                                 eval.start(param);
-
-                                Log.e(TAG, "start recording");
                                 recording = true;
                                 // 一段时间后调用stop
                                 //
@@ -457,22 +457,24 @@ public class DescribeThePictureActivity extends AppCompatActivity
 
     }
 
-    public AudioPlayer.Listener playerListener = new AudioPlayer.Listener() {
-
+    public AudioPlayer.Listener playerListener = new AudioPlayer.Listener()
+    {
         @Override
-        public void onStart(AudioPlayer audioPlayer) {
-
+        public void onStart(AudioPlayer audioPlayer)
+        {
+            playing = true;
         }
 
         @Override
-        public void onStop(AudioPlayer audioPlayer) {
+        public void onStop(AudioPlayer audioPlayer)
+        {
             playing = false;
         }
 
         @Override
-        public void onError(AudioPlayer audioPlayer, String s) {
+        public void onError(AudioPlayer audioPlayer, String s)
+        {
             playing = false;
-
         }
     };
 

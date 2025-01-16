@@ -13,7 +13,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.ActionBar;
-
 import com.chivox.aiengine4.AgnException;
 import com.chivox.aiengine4.AudioSource;
 import com.chivox.aiengine4.Engine;
@@ -141,8 +140,7 @@ public class ChoiceActivity extends AppCompatActivity
                     jsonResultTextView.setText("");
 
                     runOnWorkerThread(new Runnable() {
-                        public void run()
-                        {
+                        public void run() {
 
                             Log.e(TAG, "click record buttosn");
 
@@ -150,7 +148,7 @@ public class ChoiceActivity extends AppCompatActivity
                             try
                             {
                                 param.put("coreProvideType", "cloud");
-                                param.put("soundIntensityEnable", 1);
+                                param.put("soundIntensityEnable", 0);
                                 {//Set vad function parameters, optional
                                     JSONObject vad = new JSONObject();
                                     vad.put("vadEnable", 1);
@@ -158,13 +156,13 @@ public class ChoiceActivity extends AppCompatActivity
                                     vad.put("speechLowSeek",20);
                                     param.put("vad", vad);
                                 }
-                                {
-                                    //Set user ID and signature information
+                                { //Set user ID
+                                    JSONObject app = new JSONObject();
+
                                     long timestamp = System.currentTimeMillis();
                                     String sig = Config.appKey+timestamp+Config.secretKey;
                                     sig = MD5.getDigest(sig);
 
-                                    JSONObject app = new JSONObject();
 
                                     app.put("applicationId", Config.appKey);
                                     app.put("sig", sig);
@@ -195,6 +193,7 @@ public class ChoiceActivity extends AppCompatActivity
                                 // exception
                                 return;
                             }
+
 
                             File file = new File(AIEngineHelper.getAviFile(context));
                             Log.e(TAG, "file path11: " + file);
@@ -231,7 +230,6 @@ public class ChoiceActivity extends AppCompatActivity
 
                             eval.callback.onEvalResult = (eval_, json) ->
                             {
-
                                     //Result processing submits to another thread, avoiding blocking or waiting.
                                     runOnWorkerThread(new Runnable()
                                     {
@@ -265,7 +263,7 @@ public class ChoiceActivity extends AppCompatActivity
                                             });
                                         }
                                     });
-                            };
+                                };
 
 
                             eval.callback.onVadStatus = (eval_, vadStatus) ->
@@ -281,7 +279,11 @@ public class ChoiceActivity extends AppCompatActivity
                                     }
                                 });
 
-                                if (vadStatus == 2) {
+
+                                if ((vadStatus == 2)&&(recording == true))
+                                {
+                                    recording = false;
+
                                     runOnWorkerThread(new Runnable() {
                                         public void run() {
                                             try {
@@ -301,36 +303,29 @@ public class ChoiceActivity extends AppCompatActivity
                                 }
                             };
 
-                            try
-                            {
+                            eval.callback.onSoundIntensity = (eval_, soundIntensity) -> {
+                                Log.e(TAG, "Sound Intensity: " + soundIntensity);
+
+                                String soundIntensityResult = "onSoundIntensity:" + String.valueOf(soundIntensity);
+
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        jsonResultTextView.setText(soundIntensityResult);
+                                    }
+                                });
+                            };
+
+                            try {
                                 eval.start(param);
-
-                                Log.e(TAG, "start recording");
                                 recording = true;
-
                                 // 一段时间后调用stop
                                 //
-                            } catch (AgnException e)
-                            {
+                            } catch (AgnException e) {
                                 eval.cancel();
                             }
 
-
                         }
-
-
-                           // if (0 != ret.errId)
-                            //{
-                                //Failed to call start interface, please check ret.errId, ret.error to analyze the reason
-                                //Log.e(TAG, "engine start fail, errId:"+ ret.errId + "errInfo:" + ret.error);
-                                //return;
-                            //}
-                            //else
-                            //{
-                                //Log.e(TAG, "start recording");
-                                //recording = true;
-                            //}
-
                     });
                 } else {
                     if (recordButton.getText().equals(getText(R.string.stop))) {
@@ -411,13 +406,13 @@ public class ChoiceActivity extends AppCompatActivity
         @Override
         public void onStart(AudioPlayer audioPlayer)
         {
-            Log.e(TAG, "player onStart");
+            playing = true;
         }
 
         @Override
         public void onStop(AudioPlayer audioPlayer)
         {
-            Log.e(TAG, "player onStop");
+            playing = false;
         }
 
         @Override
@@ -426,6 +421,5 @@ public class ChoiceActivity extends AppCompatActivity
             playing = false;
         }
     };
-
 
 }

@@ -474,7 +474,11 @@ public class WordSentPredActivity extends AppCompatActivity
                                             final int sound_intensity = json.optInt("sound_intensity");
 
                                             //If status value is 2, it means the user has stopped speaking.
-                                            if (status == 2) {
+                                            if ((status == 2)&&(recording == true))
+                                            {
+
+                                                recording = false;
+
                                                 runOnWorkerThread(new Runnable()
                                                 {
                                                     public void run()
