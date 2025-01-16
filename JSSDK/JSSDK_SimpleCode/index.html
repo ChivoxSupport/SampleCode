@@ -23,9 +23,12 @@
 			<div class="swiper-wrapper" style="width: 100%;height: 500px;">
 				<div class="swiper-slide swiper-no-swiping">
 					<div class="buju">
-						<div class="pron"> </div>
-						<div class="text">apple</div>
-						<div class="pron">UK ['æp(ə)l]　US [ˈæpl]</div>
+						<!--<div class="pron">n. 手，协助  v. 交，递，给</div>-->
+						<div class="text" id="text"></div>
+						<!--<div class="pron">UK [hændz]　US [hændz]</div>-->
+						<div class="changebtn">
+							<div><button class="btnAns" onclick="changeWords()">Change word</button></div>
+						</div>
 					</div>
 				</div>
 				<div class="swiper-slide swiper-no-swiping">
@@ -46,7 +49,7 @@
 				</div>
 				<div class="swiper-slide swiper-no-swiping">
 					<div class="buju">
-						<div class="pron">Please answer the question based on the text below. </br></br> Boy: I love summer because I can go to the beach. Which seasons is your favourite? </br> Girl: Spring. It's not too hot. There are beautiful trees and flowers everywhere. </br></div>
+						<div class="pron">Please answer the question based on the text below.</br></br> Boy: I love summer because I can go to the beach. Which seasons is your favourite? </br> Girl: Spring. It's not too hot. There are beautiful trees and flowers everywhere. </br></div>
 						<div class="text"></br> Question: Why does the boy like summer? </br> Your answer: ...</div>
 						<div class="showbtn">
 							<div><button class="btnAns" onclick="showAnswer(1)">Show reference answer</button></div>
@@ -55,8 +58,7 @@
 				</div>
 				<div class="swiper-slide swiper-no-swiping">
 					<div class="buju">
-						<div class="pron">Please describe the picture in English in 60 seconds according to the picture below. Your description can start like this:</div>
-						<div class="text">Look, what are these animals doing now in the zoo? ...</div>
+						<div class="pron">Please describe the picture in English in 60 seconds according to the picture below. Your description can start like this:</br><text class="text">Look, what are these animals doing now in the zoo? ...</text></div>						
 						<div class="showbtn">
 							<div><img class="img"  src="img/animals.png"/></div>
 							<div><button class="btnAns" onclick="showAnswer(2)">Show reference answer</button></div>
@@ -141,10 +143,13 @@
 <script type="text/javascript" src="js/phoneticConvert.js" ></script>
 <script type="text/javascript" src="js/data.js" ></script>
 <script type="text/javascript" src="https://sdk.cloud.chivox.com/chivoxsdk-js/v6.1/chivox.min.js"></script>
+<script type="text/javascript" src="js/letters.js" ></script>
 <script>
 	var sdkStatus = false;
 	var recording = false;
 	var audioUrl = "";
+	var wordsIndex = 0;
+	$("#text").html(contentList[currentPage-1].refText[wordsIndex]); 
 	/********************CHIVOX SDK*********************/
 	let player = new Html5Player();
 	let sdk = new Html5Recorder({
@@ -164,6 +169,25 @@
 	    }
 	});
 
+	//change another word
+	function changeWords(){
+		if(wordsIndex < 11){
+			wordsIndex++;
+		}else{
+			wordsIndex = 0;
+		}
+		$("#text").html(contentList[currentPage-1].refText[wordsIndex]);
+		 
+		if(recording){
+		    sdk.stopRecord();
+		    recording = false;
+		    $("#initBtn").css("display","inherit");
+		    $("#luyinBtn").css("display","none");
+		}
+		$("#tableData").html(""); 
+		$("#tableData2").html(""); 
+		audioUrl = "";
+	}
 	/*Record*/
 	function record(){
 		player.stop();
@@ -172,14 +196,19 @@
 		$("#tableData3").html("");
         $("#initBtn").css("display","none");
         $("#luyinBtn").css("display","inherit");
+		//Reset serverParams parameters
+		let params = contentList[currentPage-1].serverParams;
+		let type = contentList[currentPage-1].serverParams.coreType;
+		if(type == "en.word.score" ||type == "en.word.pron"){
+			params.refText = contentList[currentPage-1].refText[wordsIndex];
+		}
 		if(sdkStatus && !recording){
-			//alert(JSON.stringify(contentList[currentPage-1].serverParams));
 			recording = true;
 			sdk.record({
 				playDing: false,
 			    audioType: "wav",
 			    duration: contentList[currentPage-1].duration,
-			    serverParams: contentList[currentPage-1].serverParams,
+			    serverParams:params,
 			    onRecordIdGenerated: function(tokenId) {
 			        console.log("tokenId: "+JSON.stringify(tokenId));
 			    },
@@ -228,35 +257,70 @@
 						var tableHTML1 = "<table><tr><th>Overall score</th>";
 						var tableHTML2 = "<tr><td>"+ score.result.overall +"</td>";
 						if(currentPage == 1){
-							let rec = score.result.details.word[0].rec; 
-							let recAry = rec.split(" "); 
-							let stressAry = score.result.details.word[0].stress;
-							let accent = score.result.details.word[0].accent;
-							let labStr = '';
-							let recStr = '';
-							/* stress */
-							for(let s=0; s<stressAry.length; s++){
-								if(stressAry[s].ref == 1){
-									labStr += "'";
-								}
-								let strAry = stressAry[s].char.split("_"); 
-								for(let l=0; l<strAry.length; l++){
-									if(accent == 2){
-										labStr += phoneticConvertUS(strAry[l]); //K.K.(US)
-									}else{
-										labStr += phoneticConvert(strAry[l]); //IPA88(UK)
+							let coreType = contentList[currentPage-1].serverParams.coreType;
+							if("en.word.pron" == coreType){
+								let rec = score.result.details.word[0].rec; 
+								let recAry = rec.split(" "); 
+								let stressAry = score.result.details.word[0].stress;
+								let accent = score.result.details.word[0].accent;
+								let labStr = '';
+								let recStr = '';
+								/* stress */
+								for(let s=0; s<stressAry.length; s++){
+									if(stressAry[s].ref == 1){
+										labStr += "'";
+									}
+									let strAry = stressAry[s].char.split("_"); 
+									for(let l=0; l<strAry.length; l++){
+										if(accent == 2){
+											labStr += phoneticConvertUS(strAry[l]); //K.K.(US)
+										}else{
+											labStr += phoneticConvert(strAry[l]); //IPA88(UK)
+										}
 									}
 								}
-							}
-							for(let i=0; i<recAry.length; i++){
-								if(accent == 2){
-									recStr += phoneticConvertUS(recAry[i]); //K.K.(US)
-								}else{
-									recStr += phoneticConvert(recAry[i]); //IPA88(UK)
+								for(let i=0; i<recAry.length; i++){
+									if(accent == 2){
+										recStr += phoneticConvertUS(recAry[i]); //K.K.(US)
+									}else{
+										recStr += phoneticConvert(recAry[i]); //IPA88(UK)
+									}
 								}
+								tableHTML1 += "<th>标准faint</th><th>你的发音</th></tr>";
+								tableHTML2 += "<td>"+ labStr +"</td><td>"+ recStr +"</td></tr></table>";
+							}else if("en.word.score" == coreType){
+								tableHTML1 += "</tr>";
+								tableHTML2 += "</tr></table>";
+								var resultArray =score.result.details[0].phonics; //phoneticSymbolsAndLettersMap(score.result);
+								//alert(JSON.stringify(resultArray));
+								var tableHTMLA = "<table><tr><td>Letters</td>"; //letters
+								//var tableHTMLB = "<tr><td>Phonemes</td>"; //phoneme
+								var tableHTMLC = "<tr><td>Phonetic symbols</td>"; //phonics symbol
+								var tableHTMLD = "<tr><td>Score</td>"; //score
+								for(let i=0; i<resultArray.length;i++){
+									tableHTMLA += "<td>"+ resultArray[i].spell +"</td>";
+									//tableHTMLB += "<td>"+ resultArray[i].prons +"</td>";
+									tableHTMLC += "<td>";
+									for(let j=0; j<resultArray[i].phoneme.length; j++){
+										if(resultArray[i].phoneme[j] != ""){
+											tableHTMLC += resultArray[i].phoneme[j];
+										}else{
+											tableHTMLC += "#";
+										}
+									}
+									tableHTMLC += "</td>";
+									
+									tableHTMLD += "<td>"+ resultArray[i].overall +"</td>";
+									
+								}
+									tableHTMLA += "</tr>";
+									//tableHTMLB += "</tr>";
+									tableHTMLC += "</tr>";
+									tableHTMLD += "</tr></table>";
+								let tableData = tableHTMLA + tableHTMLC + tableHTMLD;
+								$("#tableData2").html(tableData); 
 							}
-							tableHTML1 += "<th>Standard pronunciation</th><th>Your pronunciation</th></tr>";
-							tableHTML2 += "<td>"+ labStr +"</td><td>"+ recStr +"</td></tr></table>";
+							
 						}else if(currentPage == 2 || currentPage == 3){
 							let fluency = score.result.fluency.overall;
 							let accuracy = score.result.accuracy;

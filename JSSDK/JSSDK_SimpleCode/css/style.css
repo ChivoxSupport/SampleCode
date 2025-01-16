@@ -8,6 +8,7 @@ body {
 }
 .container {
 	width: 100%;
+	font-family: "Segoe UI",Verdana, Lucida Sans Regular, Lucida Sans Unicode, Arial, sans-serif ;
 }
 .title{
 	font-size: 18px;
@@ -79,6 +80,9 @@ body {
 .showbtn{
 	display:flex;
 	flex-direction:column;
+}
+.changebtn{
+	margin-top: 50px; 
 }
 .img{
 	height:200px;

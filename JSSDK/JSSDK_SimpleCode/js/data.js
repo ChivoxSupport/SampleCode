@@ -96,17 +96,19 @@ var swiper2 = new Swiper('.swiper2', {
 
 /*Content*/
 var contentList = [{
-    trans: 'n. 苹果',
-    text: "apple",
-    pron:"UK ['æp(ə)l]　US [ˈæpl]",
+    trans: 'n. 手，协助  v. 交，递，给',
+    text: "hands",
+    pron:"UK [hændz]　US [hændz]",
     duration: 4000,
     serverParams: {
-        coreType:'en.word.pron',
-        refText:"apple",
+        //coreType:'en.word.pron',
+        coreType:'en.word.score',
+        refText:"draw",
         rank: 100,
         attachAudioUrl: 1,
         userId: "chivoxJssdk"
-    }
+    },
+	refText:["draw","tree","hands","cats","apple","exercise","usually","write","quickly","he","to","windy","either","exchange"]
 }, {
     trans: '',
     text: 'Thank you for coming to see me.',
