@@ -22,12 +22,7 @@ dependencies:
   path_provider: ^2.0.11
   fluttertoast: ^8.2.4
   permission_handler: ^9.0.2
-  chivox_aiengine: ^0.0.2
-    # When depending on this package from a real application you should use:
-    #   chivox_aiengine: ^x.y.z
-    # See https://dart.dev/tools/pub/dependencies#version-constraints
-    # The example app is bundled with the plugin so we use a path dependency on
-    # the parent directory to use the current plugin's version.
+  chivox_aiengine: 
     # path: D:\Opendoc\docs\sdk-version\Flutter\sdk-flutter-v1.0.0
 
   # The following adds the Cupertino Icons font to your application.
