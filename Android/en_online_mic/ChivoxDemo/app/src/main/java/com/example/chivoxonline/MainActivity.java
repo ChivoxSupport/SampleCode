@@ -256,7 +256,7 @@ public class MainActivity extends AppCompatActivity
                     GlobalCfg.setUserId(Config.userId);
 
                     //Get sdk version
-                    Log.e(TAG, "sdk version:" + SdkInfo.singleton().commonSdkVersion + "+" + SdkInfo.singleton().version);
+                    Log.e(TAG, "sdk version:" + SdkInfo.singleton().commonSdkVersion + "-" + SdkInfo.singleton().version);
 
 
                     //Use online assessments
