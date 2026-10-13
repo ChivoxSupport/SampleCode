@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>Chivox Speech Assessment</title>
+
+	<script src="js/jquery.min.js"></script>
+	<script type="text/javascript" src="js/swiper-3.4.0.jquery.min.js" ></script>
+	<link rel="stylesheet" href="css/swiper-3.2.7.min.css" />
+	<link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+	<div class="container">
+		<div class="title"><B>Chivox Speech Assessment</B></div>
+		<!-- swiper1 menu-->
+		<div class="swiper-container swiper1">
+			<div class="swiper-wrapper" id="tabBars"></div>
+		</div>
+		<!-- swiper2 -->
+		<div class="swiper-container swiper2">
+			<div class="swiper-wrapper" style="width: 100%;height: 500px;">
+				<div class="swiper-slide swiper-no-swiping">
+					<div class="buju">
+						<!--<div class="pron">n. 手，协助  v. 交，递，给</div>-->
+						<div class="text" id="text"></div>
+						<!--<div class="pron">UK [hændz]　US [hændz]</div>-->
+						<div class="changebtn">
+							<div><button class="btnAns" onclick="changeWords()">Change word</button></div>
+						</div>
+					</div>
+				</div>
+				<div class="swiper-slide swiper-no-swiping">
+					<div class="buju">
+						<div class="text">Thank you for coming to see me.</div>
+					</div>
+				</div>
+				<div class="swiper-slide swiper-no-swiping">
+					<div class="buju">
+						<div class="text">Happiness is not about being immortal nor having food or rights in one's hand. </br> It's about having each tiny wish come true, </br> or having something to eat when you are hungry or having someone's love when you need love.						</div>
+					</div>
+				</div>
+				<div class="swiper-slide swiper-no-swiping">
+					<div class="buju">
+						<div class="pron">Tell me an animal that can fly.</div>
+						<div class="text"><div class="sel">A. Tiger.</br>B. Panda.</br>C. Bird.</br></div></div>
+					</div>
+				</div>
+				<div class="swiper-slide swiper-no-swiping">
+					<div class="buju">
+						<div class="pron">Please answer the question based on the text below.</br></br> Boy: I love summer because I can go to the beach. Which seasons is your favourite? </br> Girl: Spring. It's not too hot. There are beautiful trees and flowers everywhere. </br></div>
+						<div class="text"></br> Question: Why does the boy like summer? </br> Your answer: ...</div>
+						<div class="showbtn">
+							<div><button class="btnAns" onclick="showAnswer(1)">Show reference answer</button></div>
+						</div>
+					</div>
+				</div>
+				<div class="swiper-slide swiper-no-swiping">
+					<div class="buju">
+						<div class="pron">Please describe the picture in English in 60 seconds according to the picture below. Your description can start like this:</br><text class="text">Look, what are these animals doing now in the zoo? ...</text></div>						
+						<div class="showbtn">
+							<div><img class="img"  src="img/animals.png"/></div>
+							<div><button class="btnAns" onclick="showAnswer(2)">Show reference answer</button></div>
+						</div>
+					</div>
+				</div>
+				<div class="swiper-slide swiper-no-swiping">
+					<div class="buju">
+						<div class="pron">Please say a paragraph in English ...</div>
+						<div class="text" id="asrRec"></div>
+					</div>
+				</div>
+				<div class="swiper-slide swiper-no-swiping">
+					<div class="buju">
+						<div class="pron">Please read the following words correctly(no order required)</div>
+						<table style="font-weight:bold;width:60%; margin: 0 auto; padding-top: 50px;">
+							<tr>
+								<td style="width: 10%;height:20px;">color</td> <!--<text style="font-weight:normal;">100</text></br> -->
+								<td style="width: 30%;text-align:right;">map</td>
+								<td style="width: 30%;"></td>
+								<td style="width: 30%;">green</td>
+							</tr>
+							<tr>
+								<td></td> <td>morning</td> <td style="text-align:right;">are</td> <td></td>
+							</tr>
+							<tr>
+								<td>evening</td> <td></td> <td>wonderful</td> <td>music</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+				
+				<div class="swiper-slide swiper-no-swiping">
+					<div class="buju">
+						<div class="text">He finds it very hard to travel around the big city.</div>
+						<div class="pron" id="tableData3" style="display: flex; justify-content: center; ">
+							
+						</div>
+					</div>
+				</div>
+				
+			</div>
+		</div>
+
+		<div class="answer">
+			<p id="dialogue">
+				Answer1: He likes summer because he can go to the beach.</br>
+				Answer2: Because he can go to the beach.</br>
+				Answer3: So he can go to the beach.</br>
+				Answer4: He can go to the beach.
+			</p>
+			<p id="picture">
+				Answer1: Look, what are these animals doing now in the zoo? Four elephants are drinking water. Two cute pandas are sleeping on the tree. A monkey is sitting over there and eating a banana. And a tiger is swimming in the water. Two giraffes are running!</br>
+				Answer2: Look, what are these animals doing now in the zoo? There are four elephants in the zoo and they are drinking water. Two cute pandas are sleeping on the tree. A monkey is eating a banana. And a tiger is swimming in the water. Two giraffes are running!</br>
+				Answer3: Look, what are these animals doing now in the zoo? Four elephants are drinking water. Two fat pandas are on the tree and they are sleeping. A monkey is sitting over there and eating a banana. And a tiger is swimming in the water. Two giraffes are running!
+			</p>
+		</div>
+
+		<div class="result" id="tableData"></div>
+		<div class="result" style="margin-top: 15px;" id="tableData2"></div>
+
+		<!--record or playback button-->
+		<div class="btn" id="luyinBtn" style="display: none;">
+			<div class="txt"><text>tap to end</text></div>
+			<div id="recordStop_btn"  class="bowen">
+				<img src="https://api.chivoxapp.com/tstest/chivoxapp/uniapp/wave.gif" />
+			</div>
+		</div>
+		<div class="btn" id="initBtn">
+			<div class="txt"><text>tap to start</text></div>
+			<div id="recordStart_btn" class="roundBtn">
+				<img src="https://api.chivoxapp.com/tstest/chivoxapp/uniapp/luyin@2x.png" />
+			</div>
+			<div id="replay_btn" class="roundBack">
+				<img src="img/playBack.png" />
+			</div>
+		</div>
+
+
+	</div>
+
+<script type="text/javascript" src="js/phoneticConvert.js" ></script>
+<script type="text/javascript" src="js/data.js" ></script>
+<script type="text/javascript" src="js/letters.js" ></script>
+<script type="module">
+
+    import { AIEngine } from 'https://sdk.cloud.chivox.com/chivoxsdk-js/v7.2.0/index.js';
+		
+	var sdkStatus = false;
+	var recording = false;
+	
+	var replayFlag = true;
+
+	window.recording = recording;
+	
+	var audioUrl = "";
+	var wordsIndex = 0;
+	
+	let engine;	
+	
+	$("#text").html(contentList[currentPage-1].refText[wordsIndex]); 
+	/********************CHIVOX SDK*********************/
+	/*create an engine*/
+    engine = new AIEngine({
+	   server: "wss://cloud.chivox.com",
+       onInited: () => 
+	   { // The engine can only be used for evaluation after this event is triggered.
+	      sdkStatus = true;
+          console.log("engine onInited")
+		  $("#scoreResult .StateInfo").html("引擎创建完成!\n");
+       },
+       onError: (err) => { //Triggering this event indicates that the engine initialization failed and the engine needs to be recreated.
+	      sdkStatus = false;
+          console.log("engine onError: " + JSON.stringify(err))
+		  $("#scoreResult .StateInfo").html("引擎创建失败" + JSON.stringify(err) +"\n");
+       }
+     });  
+
+	 var sigStr;
+		
+		//get signature
+	$.ajax({
+              url: './php/sig.php',
+              type: 'GET', // or use 'POST'
+              success: function(response) {
+                  //Save the signature for future use
+                  sigStr = response;
+                  console.log(sigStr);
+              },
+              error: function(xhr, status, error) {
+                     console.error('get signature error:', error);
+             }
+     });	 
+
+	//change another word
+	function changeWords(){
+		if(wordsIndex < 11){
+			wordsIndex++;
+		}else{
+			wordsIndex = 0;
+		}
+		$("#text").html(contentList[currentPage-1].refText[wordsIndex]);
+		 
+		if(recording){
+		    sdk.stopRecord();
+		    recording = false;
+		    $("#initBtn").css("display","inherit");
+		    $("#luyinBtn").css("display","none");
+		}
+		$("#tableData").html(""); 
+		$("#tableData2").html(""); 
+		audioUrl = "";
+	}
+	/*Record*/
+	$("#recordStart_btn").click(function()
+	{
+		//player.stop();
+		
+		$("#tableData").html(""); //clear old data
+		$("#tableData2").html("");
+		$("#tableData3").html("");
+        $("#initBtn").css("display","none");
+        $("#luyinBtn").css("display","inherit");
+		//Reset serverParams parameters
+		let params = contentList[currentPage-1].serverParams;
+		let type = contentList[currentPage-1].serverParams.coreType;
+		if(type == "en.word.score" ||type == "en.word.pron"){
+			params.refText = contentList[currentPage-1].refText[wordsIndex];
+		}
+		if(sdkStatus && !recording){
+			recording = true;
+		    engine.stop();
+			engine.start({
+			    audioType: "wav",
+				app: sigStr,
+			    duration: contentList[currentPage-1].duration,
+			    serverParams:params,
+			    listener: { 
+			    onStart: () => {
+			        console.log("========onStart========");
+			    },        
+			    onStop: (audioBlob) => {
+			        console.log("========onStop========");
+					//audioUrl = URL.createObjectURL(audioBlob);
+			    },      
+			    onInternalScore: (data) => { 
+			        console.log("========onInternalScore========");
+			    	//asr
+					if(currentPage == 7){
+						let recStr = '';
+						if(data.hasOwnProperty("result")){
+							let align = data.result.align;
+							align.forEach(function(sub){
+								recStr += sub.txt + sub.sep +' ';
+							})
+						}
+						$("#asrRec").html(recStr); 
+					}else if(currentPage == 9){
+						let realHtml = "";
+						if(data.hasOwnProperty("result")){
+							let align = data.result.details;
+							align.forEach(function(sub){
+								realHtml += "<div style='padding:3px;'>" + sub.score + "</br>" + sub.text + "</div>";
+							})
+						}
+						$("#tableData3").html(realHtml); 
+					}
+			    },
+			    onScore: (data) => {
+			    	//result
+			        console.log(data);
+			    	recording = false;
+			        $("#initBtn").css("display","inherit");
+			        $("#luyinBtn").css("display","none");
+			    	var tableHTML = "";
+			    	if(data.hasOwnProperty("result")){
+			    		//use to playback audio
+						let subUrl = data.audioUrl.split(":");
+						let backUrl = subUrl[1].split("/");
+						audioUrl ='https://' + subUrl[0] + '/' + backUrl[1] + '.mp3'; /* Address of playback audio */
+						console.log("audioUrl: "+audioUrl);
+						var tableHTML1 = "<table><tr><th>Overall score</th>";
+						var tableHTML2 = "<tr><td>"+ data.result.overall +"</td>";
+						if(currentPage == 1){
+							let coreType = contentList[currentPage-1].serverParams.coreType;
+							if("en.word.pron" == coreType){
+								let rec = data.result.details.word[0].rec; 
+								let recAry = rec.split(" "); 
+								let stressAry = data.result.details.word[0].stress;
+								let accent = data.result.details.word[0].accent;
+								let labStr = '';
+								let recStr = '';
+								/* stress */
+								for(let s=0; s<stressAry.length; s++){
+									if(stressAry[s].ref == 1){
+										labStr += "'";
+									}
+									let strAry = stressAry[s].char.split("_"); 
+									for(let l=0; l<strAry.length; l++){
+										if(accent == 2){
+											labStr += phoneticConvertUS(strAry[l]); //K.K.(US)
+										}else{
+											labStr += phoneticConvert(strAry[l]); //IPA88(UK)
+										}
+									}
+								}
+								for(let i=0; i<recAry.length; i++){
+									if(accent == 2){
+										recStr += phoneticConvertUS(recAry[i]); //K.K.(US)
+									}else{
+										recStr += phoneticConvert(recAry[i]); //IPA88(UK)
+									}
+								}
+								tableHTML1 += "<th>标准faint</th><th>你的发音</th></tr>";
+								tableHTML2 += "<td>"+ labStr +"</td><td>"+ recStr +"</td></tr></table>";
+							}else if("en.word.score" == coreType){
+								tableHTML1 += "</tr>";
+								tableHTML2 += "</tr></table>";
+								var resultArray =data.result.details[0].phonics; //phoneticSymbolsAndLettersMap(score.result);
+								//alert(JSON.stringify(resultArray));
+								var tableHTMLA = "<table><tr><td>Letters</td>"; //letters
+								//var tableHTMLB = "<tr><td>Phonemes</td>"; //phoneme
+								var tableHTMLC = "<tr><td>Phonetic symbols</td>"; //phonics symbol
+								var tableHTMLD = "<tr><td>Score</td>"; //score
+								for(let i=0; i<resultArray.length;i++){
+									tableHTMLA += "<td>"+ resultArray[i].spell +"</td>";
+									//tableHTMLB += "<td>"+ resultArray[i].prons +"</td>";
+									tableHTMLC += "<td>";
+									for(let j=0; j<resultArray[i].phoneme.length; j++){
+										if(resultArray[i].phoneme[j] != ""){
+											tableHTMLC += resultArray[i].phoneme[j];
+										}else{
+											tableHTMLC += "#";
+										}
+									}
+									tableHTMLC += "</td>";
+									
+									tableHTMLD += "<td>"+ resultArray[i].overall +"</td>";
+									
+								}
+									tableHTMLA += "</tr>";
+									//tableHTMLB += "</tr>";
+									tableHTMLC += "</tr>";
+									tableHTMLD += "</tr></table>";
+								let tableData = tableHTMLA + tableHTMLC + tableHTMLD;
+								$("#tableData2").html(tableData); 
+							}
+							
+						}else if(currentPage == 2 || currentPage == 3){
+							let fluency = data.result.fluency.overall;
+							let accuracy = data.result.accuracy;
+							let integrity = data.result.integrity;
+							tableHTML1 += "<th>Fluency</th><th>Accuracy</th><th>Integrity</th>";
+							tableHTML2 += "<td>"+ fluency +"</td><td>"+ accuracy +"</td><td>"+ integrity +"</td>";
+							if(currentPage == 2){
+								let sentDetails = data.result.details;
+								let error = '';
+								let miss = '';
+								let more = '';
+								for(let i=0; i<sentDetails.length; i++){
+									let wordObj = sentDetails[i];
+									switch(wordObj.is_err){
+										case 0:
+											break;
+										case 1:
+											if(wordObj.rec != "UNK"){
+												more += wordObj.rec+" ";
+											}
+											break;
+										case 2:
+											miss += wordObj.lab+" ";
+											break;
+										case 3:
+											error += wordObj.lab+" ";
+											
+										break;
+									}
+								}
+								tableHTML1 += "<th>Misread</th><th>Missing reading</th><th>Superfluous reading</th>";
+								tableHTML2 += "<td>"+ error +"</td><td>"+ miss +"</td><td>"+ more +"</td>";
+							}
+							tableHTML1 += "</tr>";
+							tableHTML2 += "</tr></table>";
+						}else if(currentPage == 4){
+							/*let fluency = score.result.fluency.overall;
+							let speed = score.result.fluency.speed;
+							tableHTML1 += "<th>Fluency</th><th>Speed</th></tr>";
+							tableHTML2 += "<td>"+ fluency +"</td><td>"+ speed +"</td></tr></table>";*/
+						}else if(currentPage == 5 || currentPage == 6){
+							tableHTML2 = "";
+							tableHTML2 = "<tr><td>"+ data.result.overall +"/4</td>";
+							let fluency = data.result.details.multi_dim.flu;
+							let grammar = data.result.details.multi_dim.grammar;
+							let content = data.result.details.multi_dim.cnt;
+							let pron = data.result.details.multi_dim.pron;
+							tableHTML1 += "<th>Fluency</th><th>Pronunciation</th><th>Grammar</th><th>Content</th></tr>";
+							tableHTML2 += "<td>"+ fluency +"/4</td><td>"+ pron +"/4</td><td>"+ grammar +"/4</td><td>"+ content +"/4</td></tr></table>";
+						}else if(currentPage == 7){
+							let recStr = '';
+							let align = data.result.align;
+							align.forEach(function(sub){
+								recStr += sub.txt + sub.sep +' ';
+							})
+					    	$("#asrRec").html(recStr); 
+							let pron = data.result.pron;
+							let fluency = data.result.fluency.overall;
+							let speed = data.result.fluency.speed;
+							tableHTML1 += "<th>Fluency</th><th>Pronunciation</th><th>Speed</th></tr>";
+							tableHTML2 += "<td>"+ fluency +"</td><td>"+ pron +"</td><td>"+ speed +"</td></tr></table>";
+						}else if(currentPage == 8){
+							let details = data.result.details.words;
+							let error = '';
+							let miss = '';
+							let more = '';
+							var tableHTML3 = "<table><tr>";
+							var tableHTML4 = "<tr>";
+							for(let i=0; i<details.length; i++){
+								let wordObj = details[i];
+								tableHTML3 += "<th>"+ wordObj.char +"</th>";
+								tableHTML4 += "<td>"+ wordObj.score +"</td>";
+								switch(wordObj.is_err){
+									case 0:
+										break;
+									case 1:
+										more += wordObj.char+" ";
+										break;
+									case 2:
+										miss += wordObj.char+" ";
+										break;
+									case 3:
+										error += wordObj.char+" ";
+										
+									break;
+								}						
+							}
+							tableHTML1 += "<th>Misread</th><th>Missing reading</th><th>Superfluous reading</th>";
+							tableHTML2 += "<td>"+ error +"</td><td>"+ miss +"</td><td>"+ more +"</td>";
+							tableHTML1 += "</tr>";
+							tableHTML2 += "</tr></table>";
+							tableHTML3 += "</tr>";
+							tableHTML4 += "</tr></table>";
+							let tableData = tableHTML3 + tableHTML4;
+							$("#tableData2").html(tableData); 	
+						}else if(currentPage == 9){
+							let details = data.result.details;
+							let fluency = data.result.fluency.overall;
+							let accuracy = data.result.accuracy;
+							let integrity = data.result.integrity;
+							tableHTML1 += "<th>Fluency</th><th>Accuracy</th><th>Integrity</th>";
+							tableHTML2 += "<td>"+ fluency +"</td><td>"+ accuracy +"</td><td>"+ integrity +"</td>";
+							let miss = '';
+							let more = '';
+							for(let i=0; i<details.length; i++){
+								let wordObj = details[i];
+								switch(wordObj.is_err){
+									case 0:
+										break;
+									case 1:
+										more += wordObj.text+" ";
+										break;
+									case 2:
+										miss += wordObj.text+" ";
+										break;
+										
+									break;
+								}						
+							}
+							tableHTML1 += "<th>Missing reading</th><th>Superfluous reading</th>";
+							tableHTML2 += "<td>"+ miss +"</td><td>"+ more +"</td>";
+							tableHTML1 += "</tr>";
+							tableHTML2 += "</tr></table>";
+						}
+						
+						
+						
+						
+						
+						
+						
+					}else{
+			        	alert("No result score: "+ score);
+			    	}
+			    	tableHTML = tableHTML1 + tableHTML2;
+			    	$("#tableData").html(tableHTML); 
+			    },
+			    onScoreError: function (err) {
+			    	sdk.stopRecord();
+			    	recording = false;
+			        $("#initBtn").css("display","inherit");
+			        $("#luyinBtn").css("display","none");
+			        alert(JSON.stringify(err));
+			    }
+			}});
+
+		}else{
+			alert("Please initialize the SDK first.");
+		}
+	});
+
+	$("#recordStop_btn").click(function()
+    {
+		engine.stop();
+		recording = false;
+        $("#initBtn").css("display","inherit");
+        $("#luyinBtn").css("display","none");
+	});
+
+	$("#replay_btn").click(function()
+	{
+	     console.log("audio url is : " + audioUrl);
+		 
+	     if (!audioUrl)
+		 {
+		   console.log("audio url is empty");
+		   return;
+		 }
+
+         const audio = new Audio(audioUrl);
+         audio.play();
+
+            audio.onended = () => 
+	     {
+
+				console.log("replay end");
+         };
+		  
+	});
+	
+</script>
+
+</body>
+
+</html>
